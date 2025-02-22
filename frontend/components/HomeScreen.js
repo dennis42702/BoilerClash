@@ -1,43 +1,68 @@
 // HomeScreen.js
 import * as React from "react";
-import { BottomNavigation, Text } from "react-native-paper";
-import LeaderboardFragment from "./fragments/leaderboard_june";
-import MyMap from "./fragments/MyMap";
-// import { MatieralCommunityIcons } from "react-native-vector-icons";
-// import  "react-native-vector-icons/MaterialCommunityIcons";
-// import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { BottomNavigation, Text, useTheme } from "react-native-paper";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import LeaderboardFragment from "./fragments/LeaderboardFragment";
+import MapFragment from "./fragments/MapFragment";
+import ProfileFragment from "./fragments/ProfileFragment";
 
-const MusicRoute = () => <LeaderboardFragment />;
+const LeaderboardRoute = () => <LeaderboardFragment />;
 
-const AlbumsRoute = () => <MyMap />;
+const MapRoute = () => <MapFragment />;
 
-const RecentsRoute = () => <Text>Recents</Text>;
+const ProfileRoute = () => <ProfileFragment />;
 
 const HomeScreen = () => {
+  const { colors } = useTheme();
+
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
-      key: "music",
+      key: "leaderboard",
       title: "Leaderboard",
-      focusedIcon: "heart",
-      unfocusedIcon: "heart-outline",
+      focusedIcon: "podium",
     },
-    { key: "albums", title: "Map", focusedIcon: "album" },
-    { key: "recents", title: "My Page", focusedIcon: "history" },
+    { key: "map", title: "Map", focusedIcon: "map" },
+    {
+      key: "profile",
+      title: "My Page",
+      focusedIcon: "clipboard-account-outline",
+    },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    music: MusicRoute,
-    albums: AlbumsRoute,
-    recents: RecentsRoute,
+    leaderboard: LeaderboardRoute,
+    map: MapRoute,
+    profile: ProfileRoute,
+  });
+
+  const styles = StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: "#1E1E50", // Optional: Set a background color
+      paddingTop: 23,
+    },
+    container: {
+      flex: 1,
+      padding: 16,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "white",
+    },
   });
 
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+    <SafeAreaView style={styles.safeArea}>
+      <BottomNavigation
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        barStyle={{ backgroundColor: colors.white }}
+        activeIndicatorStyle={{ backgroundColor: colors.light_grey }}
+      />
+    </SafeAreaView>
   );
 };
 

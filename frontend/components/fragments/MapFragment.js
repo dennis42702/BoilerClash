@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import React, { useState, useRef } from "react";
+import { View, StyleSheet, Dimensions, Image } from "react-native";
 import MapView, { Marker, Polygon } from "react-native-maps";
 import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const MyMap = () => {
+const MapFragment = () => {
+  const mapRef = useRef(null);
+
   const customMapStyle = [
     {
       elementType: "labels",
@@ -48,24 +51,6 @@ const MyMap = () => {
     },
   ];
 
-  const [markers, setMarkers] = useState([
-    {
-      title: "Purdue University",
-      description: "West Lafayette, IN",
-      coordinate: { latitude: 40.4237, longitude: -86.9212 },
-    },
-    {
-      title: "Memorial Mall",
-      description: "A beautiful spot on campus",
-      coordinate: { latitude: 40.424, longitude: -86.9146 },
-    },
-    {
-      title: "Ross-Ade Stadium",
-      description: "Home of Purdue Football",
-      coordinate: { latitude: 40.4352, longitude: -86.9186 },
-    },
-  ]);
-
   const buildingPolygons = [
     {
       id: "WALC",
@@ -75,8 +60,7 @@ const MyMap = () => {
         { latitude: 40.426816, longitude: -86.912798 },
         { latitude: 40.426816, longitude: -86.913537 },
       ],
-      color: "rgba(255, 0, 0, 0.5)",
-      conquered: "College of Science",
+      crowdedness: 0.88,
     },
     {
       id: "STEW",
@@ -86,8 +70,7 @@ const MyMap = () => {
         { latitude: 40.424672, longitude: -86.911969 },
         { latitude: 40.424672, longitude: -86.913447 },
       ],
-      color: "rgba(255, 255, 0, 0.5)",
-      conquered: "College of Science",
+      crowdedness: 0.4,
     },
     {
       id: "KRAN",
@@ -97,8 +80,7 @@ const MyMap = () => {
         { latitude: 40.4235, longitude: -86.910506 },
         { latitude: 40.4235, longitude: -86.911272 },
       ],
-      color: "rgba(200, 100, 0, 0.5)",
-      conquered: "Polytechnic Institute",
+      crowdedness: 0.2,
     },
   ];
 
@@ -114,6 +96,19 @@ const MyMap = () => {
     ]);
   };
 
+  const getHeatmapColor = (score) => {
+    // Ensure score is within the 0 to 1 range
+    score = Math.max(0, Math.min(1, score));
+
+    // Interpolate between green and red
+    const red = Math.floor(255 * score);
+    const green = Math.floor(255 * (1 - score));
+    const blue = 0; // No blue component for this gradient
+
+    // Return as an rgba color with 50% opacity
+    return `rgba(${red}, ${green}, ${blue}, 0.5)`;
+  };
+
   const calculatePolygonCenter = (coordinates) => {
     const latitudes = coordinates.map((coord) => coord.latitude);
     const longitudes = coordinates.map((coord) => coord.longitude);
@@ -127,12 +122,24 @@ const MyMap = () => {
   return (
     <View style={{ flex: 1 }}>
       <MapView
+        ref={mapRef}
         style={{ flex: 1 }}
         initialRegion={{
-          latitude: 40.4237,
-          longitude: -86.9212,
-          latitudeDelta: 0.01,
+          latitude: 40.425, // Center of Purdue University
+          longitude: -86.913,
+          latitudeDelta: 0.01, // Zoomed to campus level
           longitudeDelta: 0.01,
+        }}
+        onMapReady={() => {
+          mapRef.current?.animateToRegion(
+            {
+              latitude: 40.425,
+              longitude: -86.913,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            },
+            10
+          );
         }}
         showsUserLocation={true}
         showsBuildings={false}
@@ -144,22 +151,26 @@ const MyMap = () => {
             <Polygon
               key={building.id}
               coordinates={building.coordinates}
-              fillColor={building.color}
+              fillColor={getHeatmapColor(building.crowdedness)}
               strokeWidth={0}
             />
             <Marker
               title={building.id}
               coordinate={calculatePolygonCenter(building.coordinates)}
+              icon={require("../../assets/castle.png")}
             ></Marker>
           </React.Fragment>
         ))}
       </MapView>
-      <FAB icon="plus" style={styles.fab} />
+      <FAB icon="fire" style={styles.fab} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  iconContainer: {
+    alignItems: "center",
+  },
   labelContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     paddingVertical: 4,
@@ -187,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyMap;
+export default MapFragment;

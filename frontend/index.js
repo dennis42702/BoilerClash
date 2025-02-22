@@ -6,7 +6,7 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { startLocationTracking, stopLocationTracking } from "./LocationManager";
-import { Text } from "react-native-paper";
+import theme from "./Theme";
 
 import HomeScreen from "./components/HomeScreen";
 import Login from "./components/screens/Login";
@@ -38,7 +38,7 @@ const App = () => {
   }, []);
 
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"

@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
-import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  Text,
+  PaperProvider,
+  useTheme,
+} from "react-native-paper";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = ({ navigation }) => {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,6 +54,39 @@ const Login = ({ navigation }) => {
     setLoading(false);
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: colors.background,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 20,
+      color: colors.text,
+    },
+    input: {
+      width: "100%",
+      marginBottom: 10,
+      backgroundColor: colors.surface,
+      color: colors.text,
+    },
+    loginButton: {
+      marginTop: 10,
+      width: "100%",
+      backgroundColor: colors.primary,
+    },
+    signUpButton: {
+      marginTop: 10,
+      width: "100%",
+      borderWidth: 1,
+      borderColor: colors.primary,
+    },
+  });
+
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -61,6 +101,7 @@ const Login = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
           style={styles.input}
+          activeOutlineColor={colors.primary}
         />
 
         {/* Password Input Field */}
@@ -71,12 +112,14 @@ const Login = ({ navigation }) => {
           mode="outlined"
           secureTextEntry
           style={styles.input}
+          activeOutlineColor={colors.primary}
         />
 
         {/* Forgot Password Button */}
         <Button
           mode="text"
           onPress={() => console.log("Forgot Password Pressed")}
+          textColor={colors.text}
         >
           Forgot Password?
         </Button>
@@ -97,6 +140,7 @@ const Login = ({ navigation }) => {
           mode="outlined"
           onPress={() => navigation.navigate("SignUpId")}
           style={styles.signUpButton}
+          textColor={colors.text}
         >
           Sign Up
         </Button>
@@ -104,34 +148,5 @@ const Login = ({ navigation }) => {
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "white",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  input: {
-    width: "100%",
-    marginBottom: 10,
-  },
-  loginButton: {
-    marginTop: 10,
-    width: "100%",
-  },
-  signUpButton: {
-    marginTop: 10,
-    width: "100%",
-    borderColor: "blue",
-    borderWidth: 1,
-  },
-});
 
 export default Login;
