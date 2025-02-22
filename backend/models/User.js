@@ -2,11 +2,10 @@ const mongoose = require("mongoose");
 const { isValidPassword } = require("mongoose-custom-validators");
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique:true },
-  username: { type: String, required: true, unique:true },
+  email: { type: String, unique:true },
+  username: { type: String, unique:true },
   password: {
     type: String,
-    required: true,
     validate: {
       validator: isValidPassword,
       message:
@@ -15,7 +14,7 @@ const UserSchema = new mongoose.Schema({
   },
   firstName: { type: String },
   lastName: { type: String},
-  gender: { type: Boolean },
+  gender: { type: String },
   college: { type: String },
   year: { type: String },
   weeklyStudyHours: { type: Number, default: 0 },
