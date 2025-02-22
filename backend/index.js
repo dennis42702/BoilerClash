@@ -4,8 +4,8 @@ const UserModel = require('./models/User');
 const SessionModel = require('./models/Session')
 const BuildingModel = require('./models/Building')
 const IndividualLeaderboardModel = require('./models/IndividualLeaderboard')
-const MajorLeaderboardModel = require('./MajorLeaderboard')
-const BuildingLeaderboardModel = require('./BuildingLeaderboard')
+const MajorLeaderboardModel = require('./models/MajorLeaderboard')
+const BuildingLeaderboardModel = require('./models/BuildingLeaderboard')
 
 const express = require('express');
 const mongoose = require('mongoose');
