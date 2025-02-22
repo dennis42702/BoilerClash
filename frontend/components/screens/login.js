@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -9,8 +10,8 @@ const Login = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    navigation.navigate("Home");
-    return;
+    // navigation.navigate("Home");
+    // return;
 
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
@@ -20,6 +21,13 @@ const Login = ({ navigation }) => {
     setLoading(true);
 
     try {
+      // #TODO: Save
+      await AsyncStorage.setItem("email", email, () =>
+        console.log("email saved")
+      );
+      navigation.navigate("HomeScreen");
+      return;
+
       const response = await axios.post("http://10.186.105.111:5003/login", {
         email: email,
         password: password,
@@ -27,7 +35,7 @@ const Login = ({ navigation }) => {
 
       if (response.data === "Success") {
         Alert.alert("Success", "Login successful!");
-        navigation.navigate("Home"); // Navigate to Home Screen
+        navigation.navigate("HomeScreen"); // Navigate to Home Screen
       } else {
         Alert.alert("Login Failed", response.data);
       }
@@ -87,7 +95,7 @@ const Login = ({ navigation }) => {
         {/* Sign Up Button */}
         <Button
           mode="outlined"
-          onPress={() => navigation.navigate("SignUpStep1")}
+          onPress={() => navigation.navigate("SignUpId")}
           style={styles.signUpButton}
         >
           Sign Up

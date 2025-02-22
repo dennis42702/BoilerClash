@@ -1,12 +1,12 @@
 // index.js
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { AppRegistry } from "react-native";
 import { registerRootComponent } from "expo";
 import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { startLocationTracking, stopLocationTracking } from "./LocationManager";
-// import Geofencing from "@rn-bridge/react-native-geofencing";
+import { Text } from "react-native-paper";
 
 import HomeScreen from "./components/HomeScreen";
 import Login from "./components/screens/Login";
@@ -17,7 +17,20 @@ import SignUpInfo from "./components/screens/SignUpInfo";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem("email");
+        setIsLoggedIn(!!storedUserId);
+        console.log("Login status checked:", !!storedUserId);
+      } catch (error) {
+        console.error("Something error");
+      }
+    };
+    checkLoginStatus();
+
     startLocationTracking();
     return () => {
       stopLocationTracking();
@@ -27,15 +40,15 @@ const App = () => {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{ headerShown: false }}
+        >
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPW}
-          />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SignUpStep1" component={SignUpId} />
-          <Stack.Screen name="SignUpStep2" component={SignUpInfo} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPW} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="SignUpId" component={SignUpId} />
+          <Stack.Screen name="SignUpInfo" component={SignUpInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
