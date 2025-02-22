@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGO_URI)
     }
   }); 
 
-  pp.post("/login", async (req, res) => {
+  app.post("/login", async (req, res) => {
     try {
       const { email, password } = req.body;
   
