@@ -1,12 +1,46 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Text, PaperProvider } from 'react-native-paper';
+import React, { useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
+import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
+import axios from "axios";
 
-const ForgotPasswordScreen = () => {
-  const [email, setEmail] = useState('');
-  const [validationCode, setValidationCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+const ForgotPasswordScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Function to handle Password Reset
+  const handleResetPassword = async () => {
+    if (!email || !newPassword || !confirmPassword) {
+      Alert.alert("Error", "All fields are required.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://10.186.105.111:5003/reset-password", {
+        email,
+        newPassword,
+      });
+
+      if (response.data.success) {
+        Alert.alert("Success", "Password reset successfully!");
+        navigation.navigate("Login"); // Redirect to Login screen
+      } else {
+        Alert.alert("Reset Failed", response.data.message);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Unable to connect to the server.");
+      console.error("Reset Password Error:", error);
+    }
+
+    setLoading(false);
+  };
 
   return (
     <PaperProvider>
@@ -20,16 +54,6 @@ const ForgotPasswordScreen = () => {
           onChangeText={setEmail}
           mode="outlined"
           keyboardType="email-address"
-          style={styles.input}
-        />
-
-        {/* Validation Code Input Field */}
-        <TextInput
-          label="Validation Code"
-          value={validationCode}
-          onChangeText={setValidationCode}
-          mode="outlined"
-          keyboardType="numeric"
           style={styles.input}
         />
 
@@ -56,10 +80,12 @@ const ForgotPasswordScreen = () => {
         {/* Reset Password Button */}
         <Button
           mode="contained"
-          onPress={() => console.log('Reset Password Pressed')}
+          onPress={handleResetPassword}
+          loading={loading}
+          disabled={loading}
           style={styles.resetButton}
         >
-          Reset Password
+          {loading ? "Resetting..." : "Reset Password"}
         </Button>
       </View>
     </PaperProvider>
@@ -69,23 +95,23 @@ const ForgotPasswordScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     marginBottom: 10,
   },
   resetButton: {
     marginTop: 10,
-    width: '100%',
+    width: "100%",
   },
 });
 
