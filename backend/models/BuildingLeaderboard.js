@@ -9,3 +9,6 @@ const BuildingLeaderboardSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("buildingLeaderboard", BuildingLeaderboardSchema);
+
+
+

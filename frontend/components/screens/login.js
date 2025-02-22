@@ -29,25 +29,31 @@ const Login = ({ navigation }) => {
 
     try {
       // #TODO: Save
-      await AsyncStorage.setItem("email", email, () =>
-        console.log("email saved")
-      );
-      navigation.navigate("HomeScreen");
-      return;
+      // await AsyncStorage.setItem("email", email, () =>
+      //   console.log("email saved")
+      // );
+      // navigation.navigate("HomeScreen");
+      // return;
 
       const response = await axios.post("http://10.186.105.111:5003/login", {
         email: email,
         password: password,
-      });
+      }, {
+        validateStatus: (status) => status < 500,
+        }
+      );
 
-      if (response.data === "Success") {
+      if (response.data.success) {
         Alert.alert("Success", "Login successful!");
+         //await AsyncStorage.setItem("email", email, () =>
+         // console.log("email saved")
+         //);
         navigation.navigate("HomeScreen"); // Navigate to Home Screen
       } else {
-        Alert.alert("Login Failed", response.data);
+        Alert.alert("Login Failed", response.data.message);
       }
     } catch (error) {
-      Alert.alert("Error", "Unable to connect to the server.");
+      Alert.alert("Error", "An error occurred. Please try again.");
       console.error("Login Error:", error);
     }
 

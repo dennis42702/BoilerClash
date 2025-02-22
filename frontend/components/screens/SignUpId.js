@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
 import axios from "axios";
 
-const SignUpId = ({ navigation }) => {
+const SignUpId = () => {
+  const navigation = useNavigation();
+  
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,7 +48,14 @@ const SignUpId = ({ navigation }) => {
 
   // Function to handle Sign Up
   const handleSignUp = async () => {
-    if (!validateInput()) return;
+    if (!validateInput()) {
+      return; // Stop execution if validation fails
+    }
+    
+    if (!username || !email || !password) {
+      Alert.alert("Error", "All fields are required.");
+      return;
+    }
 
     setLoading(true);
 
@@ -57,8 +67,12 @@ const SignUpId = ({ navigation }) => {
       });
 
       if (response.data.success) {
-        Alert.alert("Success", "Account created successfully!");
-        navigation.navigate("SignUpInfo"); // Move to Step 2
+        const userId = response.data.userId;
+        if (!userId) {
+          Alert.alert("Error", "Failed to retrieve user ID. Please try again.");
+          return;
+        }
+        navigation.navigate("SignUpInfo", { userId });
         console.log("Sign Up Success:", response.data);
       } else {
         Alert.alert("Sign Up Failed", response.data.message);
