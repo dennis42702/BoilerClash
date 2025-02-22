@@ -25,7 +25,7 @@ const Login = ({ navigation }) => {
       await AsyncStorage.setItem("email", email, () =>
         console.log("email saved")
       );
-      navigation.navigate("Home");
+      navigation.navigate("HomeScreen");
       return;
 
       const response = await axios.post("http://10.186.105.111:5003/login", {
@@ -35,7 +35,7 @@ const Login = ({ navigation }) => {
 
       if (response.data === "Success") {
         Alert.alert("Success", "Login successful!");
-        navigation.navigate("Home"); // Navigate to Home Screen
+        navigation.navigate("HomeScreen"); // Navigate to Home Screen
       } else {
         Alert.alert("Login Failed", response.data);
       }
@@ -95,7 +95,7 @@ const Login = ({ navigation }) => {
         {/* Sign Up Button */}
         <Button
           mode="outlined"
-          onPress={() => navigation.navigate("SignUpStep1")}
+          onPress={() => navigation.navigate("SignUpId")}
           style={styles.signUpButton}
         >
           Sign Up

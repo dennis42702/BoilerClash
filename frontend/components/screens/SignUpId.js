@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Text, PaperProvider } from 'react-native-paper';
-import axios from 'axios';
+import React, { useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
+import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
+import axios from "axios";
 
 const SignUpId = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Regular Expressions for Validation
-  const usernameRegex = /^[a-zA-Z0-9]{2,10}$/;  // 2-10 letters or numbers
-  const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;  // Must contain exactly one '@' and a domain
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/;  // 6-12 characters, at least one letter & one number
+  const usernameRegex = /^[a-zA-Z0-9]{2,10}$/; // 2-10 letters or numbers
+  const emailRegex = /^[^@]+@[^@]+\.[^@]+$/; // Must contain exactly one '@' and a domain
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/; // 6-12 characters, at least one letter & one number
 
   // Function to validate user input
   const validateInput = () => {
@@ -30,7 +30,10 @@ const SignUpId = ({ navigation }) => {
       return false;
     }
     if (!passwordRegex.test(password)) {
-      Alert.alert("Error", "Password must be 6-12 characters and include at least one letter and one number.");
+      Alert.alert(
+        "Error",
+        "Password must be 6-12 characters and include at least one letter and one number."
+      );
       return false;
     }
     if (password !== confirmPassword) {
@@ -55,7 +58,7 @@ const SignUpId = ({ navigation }) => {
 
       if (response.data.success) {
         Alert.alert("Success", "Account created successfully!");
-        navigation.navigate('SignUpStep2'); // Move to Step 2
+        navigation.navigate("SignUpInfo"); // Move to Step 2
         console.log("Sign Up Success:", response.data);
       } else {
         Alert.alert("Sign Up Failed", response.data.message);
@@ -127,23 +130,23 @@ const SignUpId = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     marginBottom: 10,
   },
   nextButton: {
     marginTop: 10,
-    width: '100%',
+    width: "100%",
   },
 });
 

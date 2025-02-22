@@ -44,11 +44,11 @@ const App = () => {
           initialRouteName="Login"
           screenOptions={{ headerShown: false }}
         >
-          <Stack.Screen name="Login" component={login} />
-          <Stack.Screen name="ForgotPassword" component={forgotPW} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="New Account" component={SignUpId} />
-          <Stack.Screen name="Personal Info" component={SignUpInfo} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPW} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="SignUpId" component={SignUpId} />
+          <Stack.Screen name="SignUpInfo" component={SignUpInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
