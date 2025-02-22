@@ -1,6 +1,7 @@
 // HomeScreen.js
 import * as React from "react";
 import { BottomNavigation, Text, useTheme } from "react-native-paper";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import LeaderboardFragment from "./fragments/LeaderboardFragment";
 import MapFragment from "./fragments/MapFragment";
@@ -13,6 +14,11 @@ const MapRoute = () => <MapFragment />;
 const ProfileRoute = () => <ProfileFragment />;
 
 const HomeScreen = () => {
+   const navigation = useNavigation();
+    const route = useRoute();
+    const { userId } = route.params; 
+  
+
   const { colors } = useTheme();
 
   const [index, setIndex] = React.useState(0);
