@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGO_URI)
     }
   }); 
 
-  app.post("/login", async (req, res) => {
+  pp.post("/login", async (req, res) => {
     try {
       const { email, password } = req.body;
   
@@ -41,21 +41,21 @@ mongoose.connect(process.env.MONGO_URI)
       const user = await UserModel.findOne({ email: email });
   
       if (!user) {
-        return res.json("Account does not exist");
+        return res.json({ success: false, message: "Account does not exist" });
       }
   
       // Compare hashed password with entered password
       const isMatch = await bcrypt.compare(password, user.password);
   
       if (!isMatch) {
-        return res.json("Incorrect password");
+        return res.json({ success: false, message: "Incorrect password" });
       }
   
       // Success login
-      res.json("Success");
+      res.json({ success: true, message: "Login successful" });
   
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   });
 
