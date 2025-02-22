@@ -180,13 +180,6 @@ const SignUpInfo = () => {
         {/* Buttons */}
         <View style={styles.buttonContainer}>
           <Button
-            mode="outlined"
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            Back
-          </Button>
-          <Button
             mode="contained"
             onPress={handleSubmit}
             loading={loading}
