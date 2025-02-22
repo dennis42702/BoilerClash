@@ -92,15 +92,19 @@ mongoose.connect(process.env.MONGO_URI)
       // Find user by email
       const user = await UserModel.findOne({ email: email });
   
+
+      // Generic error message to prevent enumeration
+      const errorMessage = "Invalid email or password.";
+
       if (!user) {
-        return res.json({ success: false, message: "Account does not exist" });
+        return res.status(401).json({ success: false, message: errorMessage });
       }
   
       // Compare hashed password with entered password
       const isMatch = await bcrypt.compare(password, user.password);
   
       if (!isMatch) {
-        return res.json({ success: false, message: "Incorrect password" });
+        return res.status(401).json({ success: false, message: errorMessage });
       }
   
       // Success login

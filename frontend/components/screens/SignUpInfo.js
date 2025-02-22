@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider, Menu } from "react-native-paper";
 import axios from "axios";
 
 const SignUpInfo = () => {
+  const navigation = useNavigation();
   const route = useRoute();
   const { userId } = route.params;
 

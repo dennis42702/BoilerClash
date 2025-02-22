@@ -63,12 +63,11 @@ const SignUpId = () => {
       });
 
       if (response.data.success) {
-        const userId = response.data.user_id;
+        const userId = response.data.userId;
         if (!userId) {
           Alert.alert("Error", "Failed to retrieve user ID. Please try again.");
           return;
         }
-        Alert.alert("Success", "Account created successfully!");
         navigation.navigate("SignUpInfo", { userId });
         console.log("Sign Up Success:", response.data);
       } else {
