@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   },
   firstName: { type: String },
   lastName: { type: String},
-  gender: { type: Boolean },
+  gender: { type: String},
   college: { type: String },
   year: { type: String },
   weeklyStudyHours: { type: Number, default: 0 },
