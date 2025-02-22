@@ -12,17 +12,14 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
-   const navigation = useNavigation();
-    
-  
+  const navigation = useNavigation();
+
   const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-  
-
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
       return;
@@ -38,11 +35,14 @@ const Login = () => {
       // navigation.navigate("HomeScreen");
       // return;
 
-      const response = await axios.post("http://10.186.105.111:5003/login", {
-        email: email,
-        password: password,
-      }, {
-        validateStatus: (status) => status < 500,
+      const response = await axios.post(
+        "http://10.186.124.108:5003/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          validateStatus: (status) => status < 500,
         }
       );
 
@@ -50,9 +50,9 @@ const Login = () => {
         const userId = response.data.userId;
         console.log(userId);
         Alert.alert("Success", "Login successful!");
-         //await AsyncStorage.setItem("email", email, () =>
-         // console.log("email saved")
-         //);
+        //await AsyncStorage.setItem("email", email, () =>
+        // console.log("email saved")
+        //);
         navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
       } else {
         Alert.alert("Login Failed", response.data.message);

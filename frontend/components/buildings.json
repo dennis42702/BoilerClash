@@ -28,5 +28,57 @@
       { "latitude": 40.4235, "longitude": -86.911272 }
     ],
     "crowdedness": 0.2
+  },
+
+  {
+    "id": "PMU",
+    "coordinates": [
+      { "latitude": 40.425461, "longitude": -86.910466 },
+      { "latitude": 40.424567, "longitude": -86.910466 },
+      { "latitude": 40.424567, "longitude": -86.911704 },
+      { "latitude": 40.425461, "longitude": -86.911724 }
+    ],
+    "crowdedness": 0.4
+  },
+  {
+    "id": "RAWL",
+    "coordinates": [
+      { "latitude": 40.423880, "longitude": -86.909250 },
+      { "latitude": 40.423660, "longitude": -86.909250 },
+      { "latitude": 40.423660, "longitude": -86.910215 },
+      { "latitude": 40.423880, "longitude": -86.910215 }
+    ],
+    "crowdedness": 0.2
+  },
+  {
+    "id": "LWSN",
+    "coordinates": [
+      { "latitude": 40.428163, "longitude": -86.916780 },
+      { "latitude": 40.427424, "longitude": -86.916780 },
+      { "latitude": 40.427424, "longitude": -86.917193 },
+      { "latitude": 40.428163, "longitude": -86.917193}
+    ],
+    "crowdedness": 0.1
+  },
+  {
+    "id": "CREC",
+    "coordinates": [
+      { "latitude":  40.4293, "longitude": -86.92190 },
+      { "latitude": 40.427575, "longitude": -86.92190 },
+      { "latitude": 40.427575, "longitude": -86.9230 },
+      { "latitude":  40.4293, "longitude": -86.9230}
+    ],
+    "crowdedness": 0.2
+  },
+  {
+    "id": "KRCH",
+    "coordinates": [
+      { "latitude": 40.427773, "longitude": -86.920796 },
+      { "latitude": 40.427485, "longitude": -86.920796 },
+      { "latitude": 40.427485, "longitude": -86.921602 },
+      { "latitude": 40.427773, "longitude": -86.921602 }
+    ],
+    "crowdedness": 0.2
   }
+
 ]
