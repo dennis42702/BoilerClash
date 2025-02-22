@@ -8,34 +8,34 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Function to handle login
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
-      const response = await axios.post("http://localhost:5000/login", {
-        email: email,
-        password: password,
+      const response = await axios.post("http://10.186.105.111:5003/login", { 
+        email: email, 
+        password: password 
       });
-
-      if (response.data.success) {
+  
+      if (response.data === "Success") {
         Alert.alert("Success", "Login successful!");
         navigation.navigate("Home"); // Navigate to Home Screen
       } else {
-        Alert.alert("Login Failed", "Invalid email or password.");
+        Alert.alert("Login Failed", response.data);
       }
     } catch (error) {
       Alert.alert("Error", "Unable to connect to the server.");
       console.error("Login Error:", error);
     }
-
+  
     setLoading(false);
   };
+  
 
   return (
     <PaperProvider>
