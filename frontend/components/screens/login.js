@@ -7,18 +7,21 @@ import {
   PaperProvider,
   useTheme,
 } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Login = ({ navigation }) => {
+const Login = () => {
+   const navigation = useNavigation();
+    
+  
   const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    // navigation.navigate("Home");
-    // return;
+  
 
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
@@ -44,11 +47,12 @@ const Login = ({ navigation }) => {
       );
 
       if (response.data.success) {
+        const userId = response.data.userId;
         Alert.alert("Success", "Login successful!");
          //await AsyncStorage.setItem("email", email, () =>
          // console.log("email saved")
          //);
-        navigation.navigate("HomeScreen"); // Navigate to Home Screen
+        navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
       } else {
         Alert.alert("Login Failed", response.data.message);
       }

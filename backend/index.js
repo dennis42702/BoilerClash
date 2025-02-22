@@ -108,7 +108,7 @@ mongoose.connect(process.env.MONGO_URI)
       }
   
       // Success login
-      res.json({ success: true, message: "Login successful" });
+      res.json({ success: true, message: "Login successful", userId: user._id});
   
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
