@@ -11,26 +11,31 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const bcrypt = require("bcrypt");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+
 app.use(bodyParser.json());
-app.use(cors()); // Not required for React Native but useful for testing
+app.use(cors()); 
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error("MongoDB Connection Failed:", err));
 
-  app.post("/users", async (req, res) => {
+  app.post("/signup", async (req, res) => {
     try {
-      const newUser = new UserModel(req.body);
-      await newUser.save();
-      res.status(201).json({ message: "User saved", user: newUser });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const user = await UserModel.create({ ...req.body, password: hashedPassword });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
-  });
+  }); 
+
+  app.post("")
+
+
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
