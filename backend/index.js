@@ -25,15 +25,67 @@ mongoose.connect(process.env.MONGO_URI)
 
   app.post("/signup", async (req, res) => {
     try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      const user = await UserModel.create({ ...req.body, password: hashedPassword });
-      res.json(user);
+        const {username, email, password} = req.body;
+
+        if(!username || !email || !password) {
+            return res.status(400).json({success:false, message: "All fields are required"})
+        }
+
+        const existingUser = await UserModel.findOne({email});
+        if(existingUser) {
+            return res.status(400).json({ success: false, message: "Email already registered" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await UserModel.create({
+            username,
+            email,
+            password: hashedPassword,
+          });
+
+          res.json({ success: true, message: "Step 1 complete", userId: newUser._id });
+
+    
     } catch (err) {
-      res.status(500).json({ error: err.message });
+        console.error("Signup Error:", err);
+        res.status(500).json({ success: false, message: "Internal server error", error: err.message });
     }
   }); 
 
-  pp.post("/login", async (req, res) => {
+  app.post("/signup/details", async (req, res) => {
+    try {
+      const { userId, firstName, lastName, major, year, gender } = req.body;
+  
+      if (!userId || !firstName || !lastName || !major || !year || !gender) {
+        return res.status(400).json({ success: false, message: "All fields are required" });
+      }
+  
+      // Find the user using `userId`
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      // Update user with Step 2 details
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.major = major;
+      user.year = year;
+      user.gender = gender;
+      await user.save();
+  
+      res.json({ success: true, message: "Signup completed successfully!" });
+  
+    } catch (err) {
+      console.error("Signup Step 2 Error:", err);
+      res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+    }
+  });
+  
+
+
+  app.post("/login", async (req, res) => {
     try {
       const { email, password } = req.body;
   
