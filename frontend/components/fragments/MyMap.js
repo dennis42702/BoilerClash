@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker, Polygon } from "react-native-maps";
-import { Button, Text, Card, PaperProvider } from "react-native-paper";
+import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
 
 const MyMap = () => {
   const customMapStyle = [
@@ -68,14 +68,37 @@ const MyMap = () => {
 
   const buildingPolygons = [
     {
-      id: "building1",
+      id: "WALC",
       coordinates: [
-        { latitude: 40.426818, longitude: -86.913534 }, // Bottom Left
-        { latitude: 40.426818, longitude: -86.912787 }, // Bottom right
-        { latitude: 40.427562, longitude: -86.912815 }, // Top right
-        { latitude: 40.427563, longitude: -86.913483 }, // Top left
+        { latitude: 40.427569, longitude: -86.913537 },
+        { latitude: 40.427569, longitude: -86.912798 },
+        { latitude: 40.426816, longitude: -86.912798 },
+        { latitude: 40.426816, longitude: -86.913537 },
       ],
-      color: "rgba(255, 0, 0, 0.5)", // Red with 50% opacity
+      color: "rgba(255, 0, 0, 0.5)",
+      conquered: "College of Science",
+    },
+    {
+      id: "STEW",
+      coordinates: [
+        { latitude: 40.425438, longitude: -86.913447 },
+        { latitude: 40.425438, longitude: -86.911969 },
+        { latitude: 40.424672, longitude: -86.911969 },
+        { latitude: 40.424672, longitude: -86.913447 },
+      ],
+      color: "rgba(255, 255, 0, 0.5)",
+      conquered: "College of Science",
+    },
+    {
+      id: "KRAN",
+      coordinates: [
+        { latitude: 40.42385, longitude: -86.911272 },
+        { latitude: 40.42385, longitude: -86.910506 },
+        { latitude: 40.4235, longitude: -86.910506 },
+        { latitude: 40.4235, longitude: -86.911272 },
+      ],
+      color: "rgba(200, 100, 0, 0.5)",
+      conquered: "Polytechnic Institute",
     },
   ];
 
@@ -89,6 +112,16 @@ const MyMap = () => {
         coordinate,
       },
     ]);
+  };
+
+  const calculatePolygonCenter = (coordinates) => {
+    const latitudes = coordinates.map((coord) => coord.latitude);
+    const longitudes = coordinates.map((coord) => coord.longitude);
+    const latitude =
+      latitudes.reduce((sum, lat) => sum + lat, 0) / latitudes.length;
+    const longitude =
+      longitudes.reduce((sum, lng) => sum + lng, 0) / longitudes.length;
+    return { latitude, longitude };
   };
 
   return (
@@ -114,14 +147,14 @@ const MyMap = () => {
               fillColor={building.color}
               strokeWidth={0}
             />
-            <Marker coordinate={{ latitude: 40.424, longitude: -86.9146 }}>
-              <View style={styles.labelContainer}>
-                <Text style={styles.labelText} numberOfLines={1}></Text>
-              </View>
-            </Marker>
+            <Marker
+              title={building.id}
+              coordinate={calculatePolygonCenter(building.coordinates)}
+            ></Marker>
           </React.Fragment>
         ))}
       </MapView>
+      <FAB icon="plus" style={styles.fab} />
     </View>
   );
 };
@@ -130,21 +163,27 @@ const styles = StyleSheet.create({
   labelContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     paddingVertical: 4,
-    paddingHorizontal: 8,
+    // paddingHorizontal: 8,
     borderRadius: 5,
     borderColor: "#666",
     borderWidth: 1,
     minWidth: 50, // Minimum width to avoid truncation
-    maxWidth: 150, // Optional: Limit max width for long text
-    alignItems: "center",
-    justifyContent: "center",
+    // maxWidth: 150, // Optional: Limit max width for long text
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   labelText: {
     color: "#333",
-    fontSize: 12,
+    fontSize: 9,
     fontWeight: "bold",
     flexWrap: "wrap",
     textAlign: "center",
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    top: 0,
   },
 });
 

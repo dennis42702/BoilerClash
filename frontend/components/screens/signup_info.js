@@ -7,21 +7,36 @@ const SignUpStep2 = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  // Major Dropdown
-  const [major, setMajor] = useState("Major");
-  const [majorMenuVisible, setMajorMenuVisible] = useState(false);
+  // College Dropdown
+  const [college, setCollege] = useState("Select College");
+  const [collegeMenuVisible, setCollegeMenuVisible] = useState(false);
 
   // Class Year Dropdown
-  const [year, setYear] = useState("Class Year");
+  const [year, setYear] = useState("Select Class Year");
   const [yearMenuVisible, setYearMenuVisible] = useState(false);
 
   // Gender Selection using Buttons
   const [gender, setGender] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // List of Colleges
+  const colleges = [
+    "College of Agriculture",
+    "Daniels School of Business",
+    "College of Education",
+    "College of Engineering",
+    "Exploratory Studies",
+    "College of Health and Human Sciences",
+    "College of Liberal Arts",
+    "College of Pharmacy",
+    "Purdue Polytechnic",
+    "College of Science",
+    "College of Veterinary Medicine",
+  ];
+
   // Function to handle Sign Up Submission
   const handleSubmit = async () => {
-    if (!firstName || !lastName || major === "Major" || year === "Class Year" || !gender) {
+    if (!firstName || !lastName || college === "Select College" || year === "Select Class Year" || !gender) {
       Alert.alert("Error", "Please fill all fields.");
       return;
     }
@@ -32,7 +47,7 @@ const SignUpStep2 = ({ navigation }) => {
       const response = await axios.post("http://10.186.105.111:5003/signup/details", {
         firstName,
         lastName,
-        major,
+        college,
         year,
         gender,
       });
@@ -72,24 +87,24 @@ const SignUpStep2 = ({ navigation }) => {
           style={styles.input}
         />
 
-        {/* Major Dropdown */}
+        {/* College Dropdown */}
         <View style={styles.dropdownWrapper}>
           <Menu
-            visible={majorMenuVisible}
-            onDismiss={() => setMajorMenuVisible(false)}
+            visible={collegeMenuVisible}
+            onDismiss={() => setCollegeMenuVisible(false)}
             anchor={
               <Button
                 mode="outlined"
-                onPress={() => setMajorMenuVisible(true)}
+                onPress={() => setCollegeMenuVisible(true)}
                 style={styles.dropdown}
               >
-                {major}
+                {college}
               </Button>
             }
           >
-            <Menu.Item onPress={() => setMajor("Computer Science")} title="Computer Science" />
-            <Menu.Item onPress={() => setMajor("Industrial Engineering")} title="Industrial Engineering" />
-            <Menu.Item onPress={() => setMajor("Business")} title="Business" />
+            {colleges.map((item, index) => (
+              <Menu.Item key={index} onPress={() => setCollege(item)} title={item} />
+            ))}
           </Menu>
         </View>
 
