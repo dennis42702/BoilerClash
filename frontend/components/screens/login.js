@@ -35,19 +35,22 @@ const Login = ({ navigation }) => {
       // navigation.navigate("HomeScreen");
       // return;
 
-      const response = await axios.post("http://10.186.105.111:5003/login", {
-        email: email,
-        password: password,
-      }, {
-        validateStatus: (status) => status < 500,
+      const response = await axios.post(
+        "http://10.186.124.108:5003/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          validateStatus: (status) => status < 500,
         }
       );
 
       if (response.data.success) {
         Alert.alert("Success", "Login successful!");
-         //await AsyncStorage.setItem("email", email, () =>
-         // console.log("email saved")
-         //);
+        //await AsyncStorage.setItem("email", email, () =>
+        // console.log("email saved")
+        //);
         navigation.navigate("HomeScreen"); // Navigate to Home Screen
       } else {
         Alert.alert("Login Failed", response.data.message);
