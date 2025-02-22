@@ -48,6 +48,7 @@ const Login = () => {
 
       if (response.data.success) {
         const userId = response.data.userId;
+        console.log(userId);
         Alert.alert("Success", "Login successful!");
          //await AsyncStorage.setItem("email", email, () =>
          // console.log("email saved")

@@ -19,8 +19,42 @@ const PORT = process.env.PORT || 5003;
 app.use(bodyParser.json());
 app.use(cors()); 
 
+const initializeBuildings = async () => {
+  try {
+    const existingBuildings = await BuildingModel.countDocuments();
+    
+    if (existingBuildings === 0) {
+      console.log("No buildings found. Inserting default buildings...");
+      
+      await BuildingModel.insertMany([
+        { buildingName: "WALC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "HICKS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "HAAS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "DUDL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "LMBS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "LWSN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "LILY", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "KRCH", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "CREC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "STEW", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "KRAN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "RAWL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 }
+      ]);
+
+      console.log("Default buildings inserted.");
+    } else {
+      console.log("Buildings already exist. Skipping initialization.");
+    }
+  } catch (err) {
+    console.error("Error initializing buildings:", err);
+  }
+};
+
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
+  .then(async () => {
+    console.log("MongoDB Connected");
+    await initializeBuildings(); // Initialize buildings only if they don’t exist
+  })
   .catch(err => console.error("MongoDB Connection Failed:", err));
 
   app.post("/signup", async (req, res) => {
@@ -114,6 +148,45 @@ mongoose.connect(process.env.MONGO_URI)
       res.status(500).json({ success: false, error: err.message });
     }
   });
+
+
+  
+  app.post("/newSession", async (req, res) => {
+    try {
+      const { userId, buildingName } = req.body;
+  
+      if (!userId || !buildingName) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+      }
+  
+      const newItem = await Session.create({ field1, field2 });
+  
+      res.status(201).json({ success: true, message: "Item created", data: newItem });
+  
+    } catch (error) {
+      console.error("Error in /whatever:", error);
+      res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+  });
+
+  app.post("/updateSession", async (req, res) => {
+    try {
+      const { field1, field2 } = req.body;
+  
+      if (!field1 || !field2) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+      }
+  
+      const newItem = await SomeModel.create({ field1, field2 });
+  
+      res.status(201).json({ success: true, message: "Item created", data: newItem });
+  
+    } catch (error) {
+      console.error("Error in /whatever:", error);
+      res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+  });
+
 
 
 
