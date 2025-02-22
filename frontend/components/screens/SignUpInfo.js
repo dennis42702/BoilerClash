@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider, Menu } from "react-native-paper";
 import axios from "axios";
 
-const signup_info = ({ navigation }) => {
+const SignUpInfo = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
@@ -223,4 +223,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default signup_info;
+export default SignUpInfo;

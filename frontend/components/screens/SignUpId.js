@@ -3,23 +3,46 @@ import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Text, PaperProvider } from 'react-native-paper';
 import axios from 'axios';
 
-const signup_id = ({ navigation }) => {
+const SignUpId = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Function to handle Sign Up
-  const handleSignUp = async () => {
+  // Regular Expressions for Validation
+  const usernameRegex = /^[a-zA-Z0-9]{2,10}$/;  // 2-10 letters or numbers
+  const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;  // Must contain exactly one '@' and a domain
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/;  // 6-12 characters, at least one letter & one number
+
+  // Function to validate user input
+  const validateInput = () => {
     if (!username || !email || !password || !confirmPassword) {
       Alert.alert("Error", "All fields are required.");
-      return;
+      return false;
+    }
+    if (!usernameRegex.test(username)) {
+      Alert.alert("Error", "Username must be 2-10 letters or numbers.");
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      Alert.alert("Error", "Invalid email format.");
+      return false;
+    }
+    if (!passwordRegex.test(password)) {
+      Alert.alert("Error", "Password must be 6-12 characters and include at least one letter and one number.");
+      return false;
     }
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match.");
-      return;
+      return false;
     }
+    return true;
+  };
+
+  // Function to handle Sign Up
+  const handleSignUp = async () => {
+    if (!validateInput()) return;
 
     setLoading(true);
 
@@ -33,6 +56,7 @@ const signup_id = ({ navigation }) => {
       if (response.data.success) {
         Alert.alert("Success", "Account created successfully!");
         navigation.navigate('SignUpStep2'); // Move to Step 2
+        console.log("Sign Up Success:", response.data);
       } else {
         Alert.alert("Sign Up Failed", response.data.message);
       }
@@ -123,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default signup_id;
+export default SignUpId;

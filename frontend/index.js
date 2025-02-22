@@ -9,10 +9,10 @@ import { startLocationTracking, stopLocationTracking } from "./LocationManager";
 import { Text } from "react-native-paper";
 
 import HomeScreen from "./components/HomeScreen";
-import login from "./components/screens/login";
-import forgotPW from "./components/screens/forgotPW";
-import signup_id from "./components/screens/signup_id";
-import signup_info from "./components/screens/signup_info";
+import Login from "./components/screens/Login";
+import ForgotPW from "./components/screens/ForgotPW";
+import SignUpId from "./components/screens/SignUpId";
+import SignUpInfo from "./components/screens/SignUpInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,8 +47,8 @@ const App = () => {
           <Stack.Screen name="Login" component={login} />
           <Stack.Screen name="ForgotPassword" component={forgotPW} />
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SignUpStep1" component={signup_id} />
-          <Stack.Screen name="SignUpStep2" component={signup_info} />
+          <Stack.Screen name="New Account" component={SignUpId} />
+          <Stack.Screen name="Personal Info" component={SignUpInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
