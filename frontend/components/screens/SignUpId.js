@@ -48,6 +48,10 @@ const SignUpId = () => {
 
   // Function to handle Sign Up
   const handleSignUp = async () => {
+    if (!validateInput()) {
+      return; // Stop execution if validation fails
+    }
+    
     if (!username || !email || !password) {
       Alert.alert("Error", "All fields are required.");
       return;
@@ -68,7 +72,6 @@ const SignUpId = () => {
           Alert.alert("Error", "Failed to retrieve user ID. Please try again.");
           return;
         }
-        Alert.alert("Success", "Account created successfully!");
         navigation.navigate("SignUpInfo", { userId });
         console.log("Sign Up Success:", response.data);
       } else {
