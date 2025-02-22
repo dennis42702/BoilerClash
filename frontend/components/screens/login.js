@@ -1,51 +1,97 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
+import axios from "axios";
 
 const LoginScreen = ({ navigation }) => {
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Function to handle login
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter both Email and Password.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:5000/login", {
+        email: email,
+        password: password,
+      });
+
+      if (response.data.success) {
+        Alert.alert("Success", "Login successful!");
+        navigation.navigate("Home"); // Navigate to Home Screen
+      } else {
+        Alert.alert("Login Failed", "Invalid email or password.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Unable to connect to the server.");
+      console.error("Login Error:", error);
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <PaperProvider>
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
 
-      {/* ID Input Field */}
-      <TextInput
-        label="ID"
-        value={id}
-        onChangeText={(text) => setId(text)}
-        mode="outlined"
-        style={styles.input}
-      />
+        {/* Email Input Field */}
+        <TextInput
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          mode="outlined"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
 
-      {/* Password Input Field */}
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        mode="outlined"
-        secureTextEntry
-        style={styles.input}
-      />
+        {/* Password Input Field */}
+        <TextInput
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          mode="outlined"
+          secureTextEntry
+          style={styles.input}
+        />
 
-      {/* Forgot Password Button */}
-      <Button
-        mode="text"
-        onPress={() => console.log("Forgot Password Pressed")}
-      >
-        Forgot Password?
-      </Button>
+        {/* Forgot Password Button */}
+        <Button
+          mode="text"
+          onPress={() => console.log("Forgot Password Pressed")}
+        >
+          Forgot Password?
+        </Button>
 
-      {/* Login Button */}
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate("Home")}
-        style={styles.loginButton}
-      >
-        Login
-      </Button>
-    </View>
+        {/* Login Button */}
+        <Button
+          mode="contained"
+          onPress={handleLogin}
+          loading={loading}
+          disabled={loading}
+          style={styles.loginButton}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </Button>
+
+        {/* Sign Up Button */}
+        <Button
+          mode="outlined"
+          onPress={() => navigation.navigate("SignUpStep1")}
+          style={styles.signUpButton}
+        >
+          Sign Up
+        </Button>
+      </View>
+    </PaperProvider>
   );
 };
 
@@ -69,6 +115,12 @@ const styles = StyleSheet.create({
   loginButton: {
     marginTop: 10,
     width: "100%",
+  },
+  signUpButton: {
+    marginTop: 10,
+    width: "100%",
+    borderColor: "blue",
+    borderWidth: 1,
   },
 });
 
