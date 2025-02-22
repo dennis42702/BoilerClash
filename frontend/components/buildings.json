@@ -1,0 +1,32 @@
+[
+  {
+    "id": "WALC",
+    "coordinates": [
+      { "latitude": 40.427569, "longitude": -86.913537 },
+      { "latitude": 40.427569, "longitude": -86.912798 },
+      { "latitude": 40.426816, "longitude": -86.912798 },
+      { "latitude": 40.426816, "longitude": -86.913537 }
+    ],
+    "color": "rgba(255, 0, 0, 0.5)"
+  },
+  {
+    "id": "STEW",
+    "coordinates": [
+      { "latitude": 40.425438, "longitude": -86.913447 },
+      { "latitude": 40.425438, "longitude": -86.911969 },
+      { "latitude": 40.424672, "longitude": -86.911969 },
+      { "latitude": 40.424672, "longitude": -86.913447 }
+    ],
+    "color": "rgba(255, 255, 0, 0.5)"
+  },
+  {
+    "id": "KRAN",
+    "coordinates": [
+      { "latitude": 40.42385, "longitude": -86.911272 },
+      { "latitude": 40.42385, "longitude": -86.910506 },
+      { "latitude": 40.4235, "longitude": -86.910506 },
+      { "latitude": 40.4235, "longitude": -86.911272 }
+    ],
+    "color": "rgba(200, 100, 0, 0.5)"
+  }
+]
