@@ -13,7 +13,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require("bcrypt");
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 
 
 app.use(bodyParser.json());
@@ -33,6 +33,31 @@ mongoose.connect(process.env.MONGO_URI)
     }
   }); 
 
+  app.post("/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      // Find user by email
+      const user = await UserModel.findOne({ email: email });
+  
+      if (!user) {
+        return res.json("Account does not exist");
+      }
+  
+      // Compare hashed password with entered password
+      const isMatch = await bcrypt.compare(password, user.password);
+  
+      if (!isMatch) {
+        return res.json("Incorrect password");
+      }
+  
+      // Success login
+      res.json("Success");
+  
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
 
 
 
