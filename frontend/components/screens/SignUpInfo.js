@@ -3,7 +3,9 @@ import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider, Menu } from "react-native-paper";
 import axios from "axios";
 
-const SignUpInfo = ({ navigation }) => {
+const SignUpInfo = ({ navigation, route }) => {
+  const { userId } = route.params || {};
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
@@ -16,7 +18,7 @@ const SignUpInfo = ({ navigation }) => {
   const [yearMenuVisible, setYearMenuVisible] = useState(false);
 
   // Gender Selection using Buttons
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState(""); // Set default as an empty string
   const [loading, setLoading] = useState(false);
 
   // List of Colleges
@@ -36,6 +38,12 @@ const SignUpInfo = ({ navigation }) => {
 
   // Function to handle Sign Up Submission
   const handleSubmit = async () => {
+    if (!userId) {
+      Alert.alert("Error", "User ID is missing. Please restart the signup process.");
+      return;
+    }
+
+    // Check if required fields are filled
     if (!firstName || !lastName || college === "Select College" || year === "Select Class Year" || !gender) {
       Alert.alert("Error", "Please fill all fields.");
       return;
@@ -43,18 +51,35 @@ const SignUpInfo = ({ navigation }) => {
 
     setLoading(true);
 
+    // Log the request payload before making the request
+    console.log("Sending request with:", {
+      firstName,
+      lastName,
+      college,
+      year,
+      gender,
+    });
+
     try {
-      const response = await axios.post("http://10.186.105.111:5003/signup/details", {
-        firstName,
-        lastName,
-        college,
-        year,
-        gender,
-      });
+      const response = await axios.post(
+        "http://10.186.105.111:5003/signup/details",
+        {
+          userId,
+          firstName,
+          lastName,
+          college,
+          year,
+          gender,
+        },
+        {
+          headers: { "Content-Type": "application/json" }, // Explicitly set headers
+        }
+      );
 
       if (response.data.success) {
         Alert.alert("Success", "Account created successfully!");
         navigation.navigate("Login"); // Redirect to Login screen
+        console.log("Account created successfully!");
       } else {
         Alert.alert("Sign Up Failed", response.data.message);
       }
