@@ -1,38 +1,48 @@
 // HomeScreen.js
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Button, Text, Card, Title, Paragraph } from "react-native-paper";
+import * as React from "react";
+import { BottomNavigation, Text } from "react-native-paper";
+
+const MusicRoute = () => <Text>Music</Text>;
+
+const AlbumsRoute = () => <Text>Albums</Text>;
+
+const RecentsRoute = () => <Text>Recents</Text>;
+
+const NotificationsRoute = () => <Text>Notifications</Text>;
 
 const HomeScreen = () => {
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    {
+      key: "music",
+      title: "Favorites",
+      focusedIcon: "heart",
+      unfocusedIcon: "heart-outline",
+    },
+    { key: "albums", title: "Albums", focusedIcon: "album" },
+    { key: "recents", title: "Recents", focusedIcon: "history" },
+    {
+      key: "notifications",
+      title: "Notifications",
+      focusedIcon: "bell",
+      unfocusedIcon: "bell-outline",
+    },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    music: MusicRoute,
+    albums: AlbumsRoute,
+    recents: RecentsRoute,
+    notifications: NotificationsRoute,
+  });
+
   return (
-    <View style={styles.container}>
-      <Card style={styles.card}>
-        <Card.Content>
-          <Title>Welcome to the Home Page</Title>
-          <Paragraph>
-            This is a simple page created with React Native Paper.
-          </Paragraph>
-        </Card.Content>
-        <Card.Actions>
-          <Button mode="contained" onPress={() => alert("Button Pressed!")}>
-            Click Me
-          </Button>
-        </Card.Actions>
-      </Card>
-    </View>
+    <BottomNavigation
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-    backgroundColor: "#f5f5f5",
-  },
-  card: {
-    padding: 16,
-  },
-});
 
 export default HomeScreen;
