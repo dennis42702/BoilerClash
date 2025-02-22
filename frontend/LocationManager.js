@@ -16,24 +16,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
     if (location) {
       console.log("Background Location:", location);
-
-      // Send location to the remote API
-      //   try {
-      //     await fetch("https://your-remote-api.com/location", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //         latitude: location.coords.latitude,
-      //         longitude: location.coords.longitude,
-      //         timestamp: location.timestamp,
-      //       }),
-      //     });
-      //     console.log("Location sent successfully");
-      //   } catch (e) {
-      //     console.error("Failed to send location", e);
-      //   }
     }
   }
 });
