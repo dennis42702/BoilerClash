@@ -116,9 +116,7 @@ const MyMap = () => {
             />
             <Marker coordinate={{ latitude: 40.424, longitude: -86.9146 }}>
               <View style={styles.labelContainer}>
-                <Text style={styles.labelText} numberOfLines={1}>
-                  WALC somet more lines
-                </Text>
+                <Text style={styles.labelText} numberOfLines={1}></Text>
               </View>
             </Marker>
           </React.Fragment>

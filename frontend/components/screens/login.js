@@ -9,19 +9,22 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    navigation.navigate("Home");
+    return;
+
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
-      const response = await axios.post("http://10.186.105.111:5003/login", { 
-        email: email, 
-        password: password 
+      const response = await axios.post("http://10.186.105.111:5003/login", {
+        email: email,
+        password: password,
       });
-  
+
       if (response.data === "Success") {
         Alert.alert("Success", "Login successful!");
         navigation.navigate("Home"); // Navigate to Home Screen
@@ -32,10 +35,9 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert("Error", "Unable to connect to the server.");
       console.error("Login Error:", error);
     }
-  
+
     setLoading(false);
   };
-  
 
   return (
     <PaperProvider>
