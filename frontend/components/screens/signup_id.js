@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Text, PaperProvider } from 'react-native-paper';
+import axios from 'axios';
 
 const SignUpStep1 = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,42 @@ const SignUpStep1 = ({ navigation }) => {
   const [validationCode, setValidationCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Function to handle Sign Up
+  const handleSignUp = async () => {
+    if (!username || !email || !validationCode || !password || !confirmPassword) {
+      Alert.alert("Error", "All fields are required.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://10.186.105.111:5003/signup", {
+        username,
+        email,
+        validationCode,
+        password,
+      });
+
+      if (response.data.success) {
+        Alert.alert("Success", "Account created successfully!");
+        navigation.navigate('SignUpStep2'); // Move to Step 2
+      } else {
+        Alert.alert("Sign Up Failed", response.data.message);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Unable to connect to the server.");
+      console.error("Sign Up Error:", error);
+    }
+
+    setLoading(false);
+  };
 
   return (
     <PaperProvider>
@@ -63,7 +100,7 @@ const SignUpStep1 = ({ navigation }) => {
           onPress={() => navigation.navigate('SignUpStep2')}
           style={styles.nextButton}
         >
-          Next
+          {loading ? "Signing Up..." : "Sign Up"}
         </Button>
       </View>
     </PaperProvider>

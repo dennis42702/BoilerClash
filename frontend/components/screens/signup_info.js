@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import {
-  TextInput,
-  Button,
-  Text,
-  PaperProvider,
-  Menu,
-} from "react-native-paper";
+import { View, StyleSheet, Alert } from "react-native";
+import { TextInput, Button, Text, PaperProvider, Menu } from "react-native-paper";
+import axios from "axios";
 
 const SignUpStep2 = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
@@ -22,6 +17,39 @@ const SignUpStep2 = ({ navigation }) => {
 
   // Gender Selection using Buttons
   const [gender, setGender] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Function to handle Sign Up Submission
+  const handleSubmit = async () => {
+    if (!firstName || !lastName || major === "Major" || year === "Class Year" || !gender) {
+      Alert.alert("Error", "Please fill all fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://10.186.105.111:5003/signup/details", {
+        firstName,
+        lastName,
+        major,
+        year,
+        gender,
+      });
+
+      if (response.data.success) {
+        Alert.alert("Success", "Account created successfully!");
+        navigation.navigate("Login"); // Redirect to Login screen
+      } else {
+        Alert.alert("Sign Up Failed", response.data.message);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Unable to connect to the server.");
+      console.error("Sign Up Error:", error);
+    }
+
+    setLoading(false);
+  };
 
   return (
     <PaperProvider>
@@ -59,14 +87,8 @@ const SignUpStep2 = ({ navigation }) => {
               </Button>
             }
           >
-            <Menu.Item
-              onPress={() => setMajor("Computer Science")}
-              title="Computer Science"
-            />
-            <Menu.Item
-              onPress={() => setMajor("Industrial Engineering")}
-              title="Industrial Engineering"
-            />
+            <Menu.Item onPress={() => setMajor("Computer Science")} title="Computer Science" />
+            <Menu.Item onPress={() => setMajor("Industrial Engineering")} title="Industrial Engineering" />
             <Menu.Item onPress={() => setMajor("Business")} title="Business" />
           </Menu>
         </View>
@@ -122,10 +144,12 @@ const SignUpStep2 = ({ navigation }) => {
           </Button>
           <Button
             mode="contained"
-            onPress={() => navigation.navigate("Login")}
+            onPress={handleSubmit}
+            loading={loading}
+            disabled={loading}
             style={styles.submitButton}
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </View>
       </View>
@@ -152,17 +176,12 @@ const styles = StyleSheet.create({
   },
   dropdownWrapper: {
     width: "100%",
-    alignItems: "center", // Centers the dropdown button
+    alignItems: "center",
     marginBottom: 10,
   },
   dropdown: {
-    width: "90%", // Adjust width for better alignment
+    width: "90%",
     justifyContent: "center",
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
   },
   genderContainer: {
     flexDirection: "row",
