@@ -15,10 +15,12 @@ const UserSchema = new mongoose.Schema({
   },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  gender: { type: String, required: true },
+  gender: { type: Boolean, required: true },
   major: { type: String, required: true },
-  dob: { type: Date, required: true },
-  
+  class: { type: String, required: true },
+  weeklyStudyHours: { type: Number, default: 0 },
+  monthlyStudyHours: { type: Number, default: 0 },
+
 });
 
 module.exports = mongoose.model("user", UserSchema);
