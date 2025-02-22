@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Text, PaperProvider } from 'react-native-paper';
 import axios from 'axios';
 
 const SignUpStep1 = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [validationCode, setValidationCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Function to handle Sign Up
   const handleSignUp = async () => {
-    if (!username || !email || !validationCode || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
       Alert.alert("Error", "All fields are required.");
       return;
     }
@@ -28,7 +27,6 @@ const SignUpStep1 = ({ navigation }) => {
       const response = await axios.post("http://10.186.105.111:5003/signup", {
         username,
         email,
-        validationCode,
         password,
       });
 
@@ -65,15 +63,7 @@ const SignUpStep1 = ({ navigation }) => {
           onChangeText={setEmail}
           mode="outlined"
           keyboardType="email-address"
-          style={styles.input}
-        />
-
-        <TextInput
-          label="Validation Code"
-          value={validationCode}
-          onChangeText={setValidationCode}
-          mode="outlined"
-          keyboardType="numeric"
+          autoCapitalize="none"
           style={styles.input}
         />
 
@@ -95,9 +85,12 @@ const SignUpStep1 = ({ navigation }) => {
           style={styles.input}
         />
 
+        {/* Sign Up Button */}
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('SignUpStep2')}
+          onPress={handleSignUp}
+          loading={loading}
+          disabled={loading}
           style={styles.nextButton}
         >
           {loading ? "Signing Up..." : "Sign Up"}
