@@ -48,6 +48,10 @@ const SignUpId = () => {
 
   // Function to handle Sign Up
   const handleSignUp = async () => {
+    if (!validateInput()) {
+      return; // Stop execution if validation fails
+    }
+    
     if (!username || !email || !password) {
       Alert.alert("Error", "All fields are required.");
       return;
