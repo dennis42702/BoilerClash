@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useRoute } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider, Menu } from "react-native-paper";
 import axios from "axios";
 
-const SignUpInfo = ({ navigation, route }) => {
-  const { userId } = route.params || {};
+const SignUpInfo = () => {
+  const route = useRoute();
+  const { userId } = route.params;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -53,6 +55,7 @@ const SignUpInfo = ({ navigation, route }) => {
 
     // Log the request payload before making the request
     console.log("Sending request with:", {
+      userId,
       firstName,
       lastName,
       college,

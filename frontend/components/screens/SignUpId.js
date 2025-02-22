@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
 import axios from "axios";
 
-const SignUpId = ({ navigation }) => {
+const SignUpId = () => {
+  const navigation = useNavigation();
+  
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
