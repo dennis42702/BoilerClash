@@ -34,8 +34,8 @@ const App = () => {
             component={ForgotPW}
           />
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SignUpStep1" component={SignUpId} />
-          <Stack.Screen name="SignUpStep2" component={SignUpInfo} />
+          <Stack.Screen name="New Account" component={SignUpId} />
+          <Stack.Screen name="Personal Info" component={SignUpInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

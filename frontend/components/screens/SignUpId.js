@@ -33,6 +33,7 @@ const SignUpId = ({ navigation }) => {
       if (response.data.success) {
         Alert.alert("Success", "Account created successfully!");
         navigation.navigate('SignUpStep2'); // Move to Step 2
+        console.log("Sign Up Success:", response.data);
       } else {
         Alert.alert("Sign Up Failed", response.data.message);
       }
