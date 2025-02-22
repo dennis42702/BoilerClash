@@ -4,7 +4,7 @@ const UserModel = require('./models/User');
 const SessionModel = require('./models/Session')
 const BuildingModel = require('./models/Building')
 const IndividualLeaderboardModel = require('./models/IndividualLeaderboard')
-const MajorLeaderboardModel = require('./models/MajorLeaderboard')
+const CollegeLeaderboardModel = require('./models/CollegeLeaderboard')
 const BuildingLeaderboardModel = require('./models/BuildingLeaderboard')
 
 const express = require('express');
@@ -55,9 +55,9 @@ mongoose.connect(process.env.MONGO_URI)
 
   app.post("/signup/details", async (req, res) => {
     try {
-      const { userId, firstName, lastName, major, year, gender } = req.body;
+      const { userId, firstName, lastName, college, year, gender } = req.body;
   
-      if (!userId || !firstName || !lastName || !major || !year || !gender) {
+      if (!userId || !firstName || !lastName || !college || !year || !gender) {
         return res.status(400).json({ success: false, message: "All fields are required" });
       }
   
@@ -70,7 +70,7 @@ mongoose.connect(process.env.MONGO_URI)
       // Update user with Step 2 details
       user.firstName = firstName;
       user.lastName = lastName;
-      user.major = major;
+      user.college = college;
       user.year = year;
       user.gender = gender;
       await user.save();
