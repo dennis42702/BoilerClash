@@ -9,10 +9,10 @@ import { startLocationTracking, stopLocationTracking } from "./LocationManager";
 // import Geofencing from "@rn-bridge/react-native-geofencing";
 
 import HomeScreen from "./components/HomeScreen";
-import login from "./components/screens/login";
-import forgotPW from "./components/screens/forgotPW";
-import signup_id from "./components/screens/signup_id";
-import signup_info from "./components/screens/signup_info";
+import Login from "./components/screens/Login";
+import ForgotPW from "./components/screens/ForgotPW";
+import SignUpId from "./components/screens/SignUpId";
+import SignUpInfo from "./components/screens/SignUpInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,14 +28,14 @@ const App = () => {
     <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={login} />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
             name="ForgotPassword"
-            component={forgotPW}
+            component={ForgotPW}
           />
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SignUpStep1" component={signup_id} />
-          <Stack.Screen name="SignUpStep2" component={signup_info} />
+          <Stack.Screen name="SignUpStep1" component={SignUpId} />
+          <Stack.Screen name="SignUpStep2" component={SignUpInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

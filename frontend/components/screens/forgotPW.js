@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
 import axios from "axios";
 
-const forgotPW = ({ navigation }) => {
+const ForgotPW = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default forgotPW;
+export default ForgotPW;

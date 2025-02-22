@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
 import axios from "axios";
 
-const login = ({ navigation }) => {
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default login;
+export default Login;
