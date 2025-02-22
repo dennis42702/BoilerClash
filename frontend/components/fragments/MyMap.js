@@ -70,8 +70,8 @@ const MyMap = () => {
     {
       id: "WALC",
       coordinates: [
-        { latitude: 40.427569, longitude: -86.913537 },
-        { latitude: 40.427569, longitude: -86.912798 },
+        { latitude: 40.427869, longitude: -86.913537 },
+        { latitude: 40.427869, longitude: -86.912798 },
         { latitude: 40.426816, longitude: -86.912798 },
         { latitude: 40.426816, longitude: -86.913537 },
       ],

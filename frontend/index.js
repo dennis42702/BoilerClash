@@ -6,6 +6,7 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { startLocationTracking, stopLocationTracking } from "./LocationManager";
+// import Geofencing from "@rn-bridge/react-native-geofencing";
 
 import HomeScreen from "./components/HomeScreen";
 import LoginScreen from "./components/screens/login";
