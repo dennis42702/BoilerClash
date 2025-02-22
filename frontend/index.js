@@ -1,9 +1,11 @@
 // index.js
-import React from "react";
-import { AppRegistry } from "react-native";
+import React, { useEffect } from "react";
+// import { AppRegistry } from "react-native";
+import { registerRootComponent } from "expo";
 import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { startLocationTracking, stopLocationTracking } from "./LocationManager";
 
 import HomeScreen from "./components/HomeScreen";
 import LoginScreen from "./components/screens/login";
@@ -13,18 +15,31 @@ import SignUpStep2 from "./components/screens/signup_info";
 
 const Stack = createNativeStackNavigator();
 
-const App = () => (
-  <PaperProvider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="SignUpStep1" component={SignUpStep1} />
-        <Stack.Screen name="SignUpStep2" component={SignUpStep2} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  </PaperProvider>
-);
+const App = () => {
+  useEffect(() => {
+    startLocationTracking();
+    return () => {
+      stopLocationTracking();
+    };
+  }, []);
 
-AppRegistry.registerComponent("main", () => App);
+  return (
+    <PaperProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+          />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="SignUpStep1" component={SignUpStep1} />
+          <Stack.Screen name="SignUpStep2" component={SignUpStep2} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
+  );
+};
+
+// AppRegistry.registerComponent("main", () => App);
+registerRootComponent(App);
