@@ -9,7 +9,14 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location.",
+        "NSLocationAlwaysUsageDescription": "This app needs access to your location even when running in the background.",
+        "NSLocationWhenInUseUsageDescription": "This app needs your location to provide better services.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs your location to provide better services.",
+        "UIBackgroundModes": ["location", "fetch"]
+      }
     },
     "android": {
       "config": {

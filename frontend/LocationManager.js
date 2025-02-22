@@ -46,13 +46,16 @@ export const startLocationTracking = async () => {
   if (status === "granted" && bgStatus.status === "granted") {
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.High,
-      distanceInterval: 10, // Minimum distance (in meters) before receiving updates
-      deferredUpdatesInterval: 10000, // Minimum time interval (in ms) between updates
+      distanceInterval: 10, // meters
+      deferredUpdatesInterval: 10000, // ms
       showsBackgroundLocationIndicator: true, // Only for iOS
       foregroundService: {
         notificationTitle: "Tracking your location",
         notificationBody: "Your location is being used in the background.",
       },
+      timeInterval: 10000, // Optional: Ensures updates every 10 seconds
+      activityType: Location.ActivityType.Other, // Prevents iOS from suspending updates
+      pausesUpdatesAutomatically: false, // Ensures updates continue when app is backgrounded
     });
   } else {
     console.error("Location permission not granted");
