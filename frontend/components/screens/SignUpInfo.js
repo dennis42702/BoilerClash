@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, ScrollView, Modal, TouchableOpacity } from "react-native";
 import {
   TextInput,
   Button,
   Text,
   PaperProvider,
-  Menu,
   useTheme,
+  Menu,
 } from "react-native-paper";
 import axios from "axios";
 
@@ -22,7 +22,7 @@ const SignUpInfo = () => {
 
   // College Dropdown
   const [college, setCollege] = useState("Select College");
-  const [collegeMenuVisible, setCollegeMenuVisible] = useState(false);
+  const [collegeModalVisible, setCollegeModalVisible] = useState(false);
 
   // Class Year Dropdown
   const [year, setYear] = useState("Select Class Year");
@@ -112,6 +112,72 @@ const SignUpInfo = () => {
     setLoading(false);
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: colors.background,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 20,
+      color: colors.text,
+    },
+    input: {
+      width: "100%",
+      marginBottom: 10,
+      backgroundColor: colors.surface,
+      color: colors.text,
+    },
+    dropdownWrapper: {
+      width: "90%",
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    dropdown: {
+      width: "100%",
+      justifyContent: "center",
+    },
+    genderContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 10,
+      width: "90%",
+    },
+    genderButton: {
+      flex: 1,
+      marginHorizontal: 5,
+    },
+    loginButton: {
+      marginTop: 10,
+      width: "100%",
+      backgroundColor: colors.primary,
+    },
+    signUpButton: {
+      marginTop: 10,
+      width: "50%",
+      borderWidth: 1,
+      borderColor: colors.primary,
+    },
+  //  buttonContainer: {
+  //    flexDirection: "row",
+  //    justifyContent: "space-between",
+  //    width: "100%",
+  //  },
+  //  backButton: {
+  //    flex: 1,
+  //    marginRight: 5,
+  //  },
+  //  submitButton: {
+  //    flex: 1,
+  //    marginLeft: 5,
+  //  },
+  });
+
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -123,7 +189,7 @@ const SignUpInfo = () => {
           onChangeText={setFirstName}
           mode="outlined"
           style={styles.input}
-          activateOutlineColor={colors.primary}
+          activeOutlineColor= {colors.primary}
         />
 
         <TextInput
@@ -132,11 +198,11 @@ const SignUpInfo = () => {
           onChangeText={setLastName}
           mode="outlined"
           style={styles.input}
-          activateOutlineColor={colors.primary}
+          activeOutlineColor= {colors.primary}
         />
 
         {/* College Dropdown */}
-        <View style={styles.dropdownWrapper}>
+        {/* { <View style={styles.dropdownWrapper}>
           <Menu
             visible={collegeMenuVisible}
             onDismiss={() => setCollegeMenuVisible(false)}
@@ -151,15 +217,39 @@ const SignUpInfo = () => {
               </Button>
             }
           >
-            {colleges.map((item, index) => (
-              <Menu.Item
-                key={index}
-                onPress={() => setCollege(item)}
-                title={item}
-              />
-            ))}
+            <ScrollView style={{ maxHeight: 200 }}>
+              {colleges.map((item, index) => (
+                <Menu.Item key={index} onPress={() => setCollege(item)} title={item} />
+              ))}
+            </ScrollView>
           </Menu>
-        </View>
+        </View> } */}
+
+{/* College Dropdown (Custom Modal & Scrollable) */}
+        <TouchableOpacity onPress={() => setCollegeModalVisible(true)} style={styles.dropdown}>
+          <Text>{college}</Text>
+        </TouchableOpacity>
+
+        <Modal visible={collegeModalVisible} transparent={true} animationType="fade">
+          <TouchableOpacity style={styles.modalOverlay} onPress={() => setCollegeModalVisible(false)} />
+          <View style={styles.modalContent}>
+            <ScrollView style={styles.scrollableDropdown}>
+              {colleges.map((item, index) => (
+                <Button
+                  key={index}
+                  onPress={() => {
+                    setCollege(item);
+                    setCollegeModalVisible(false);
+                  }}
+                >
+                  {item}
+                </Button>
+              ))}
+            </ScrollView>
+          </View>
+        </Modal>
+
+
 
         {/* Class Year Dropdown */}
         <View style={styles.dropdownWrapper}>
@@ -189,7 +279,10 @@ const SignUpInfo = () => {
           <Button
             mode={gender === "Male" ? "contained" : "outlined"}
             onPress={() => setGender("Male")}
-            style={styles.genderButton}
+            style={[
+              styles.genderButton,
+              gender === "Male" ? styles.loginButton : null,
+            ]}
             textColor={colors.text}
           >
             Male
@@ -197,7 +290,10 @@ const SignUpInfo = () => {
           <Button
             mode={gender === "Female" ? "contained" : "outlined"}
             onPress={() => setGender("Female")}
-            style={styles.genderButton}
+            style={[
+              styles.genderButton,
+              gender === "Female" ? styles.loginButton : null,
+            ]}
             textColor={colors.text}
           >
             Female
@@ -211,8 +307,7 @@ const SignUpInfo = () => {
             onPress={handleSubmit}
             loading={loading}
             disabled={loading}
-            style={styles.submitButton}
-            textColor={colors.text}
+            style={styles.loginButton}
           >
             {loading ? "Submitting..." : "Submit"}
           </Button>
@@ -221,59 +316,5 @@ const SignUpInfo = () => {
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "white",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "black",
-  },
-  input: {
-    width: "100%",
-    marginBottom: 10,
-    backgroundColor: "white",
-  },
-  dropdownWrapper: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  dropdown: {
-    width: "90%",
-    justifyContent: "center",
-  },
-  genderContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 10,
-    width: "100%",
-  },
-  genderButton: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    backgroundColor: "blue",
-  },
-  backButton: {
-    flex: 1,
-    marginRight: 5,
-  },
-  submitButton: {
-    flex: 1,
-    marginLeft: 5,
-  },
-});
 
 export default SignUpInfo;
