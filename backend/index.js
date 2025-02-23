@@ -7,6 +7,7 @@ const SessionModel = require('./models/Session')
 const BuildingModel = require('./models/Building')
 const CollegeLeaderboardModel = require('./models/CollegeLeaderboard')
 const BuildingLeaderboardModel = require('./models/BuildingLeaderboard')
+const BuildingDataModel = require('./models/BuildingData')
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -51,6 +52,226 @@ const initializeBuildings = async () => {
   }
 };
 
+const initializeBuildingData = async () => {
+  try {
+    const existingData = await BuildingDataModel.countDocuments();
+    console.log(`Existing Building Data Count: ${existingData}`);
+
+    if (existingData === 0) {
+      console.log("No building data found. Inserting dataset...");
+
+      const dataset = [
+        {
+          "id": "STEW",
+          "coordinates": [
+            { "latitude": 40.427869, "longitude": -86.913537 },
+            { "latitude": 40.427869, "longitude": -86.912798 },
+            { "latitude": 40.426816, "longitude": -86.912798 },
+            { "latitude": 40.426816, "longitude": -86.913537 }
+          ],
+          "crowdedness": 0.88,
+          "conquered": "Daniels School of Business",
+          "image": "https://lh5.googleusercontent.com/p/AF1QipOYgVfG6wAEZtfAE1l1a7arX9WGRH1VSPffYviF=w426-h240-k-no"
+        },
+        {
+          "id": "STEW",
+          "coordinates": [
+            { "latitude": 40.425438, "longitude": -86.913447 },
+            { "latitude": 40.425438, "longitude": -86.911969 },
+            { "latitude": 40.424672, "longitude": -86.911969 },
+            { "latitude": 40.424672, "longitude": -86.913447 }
+          ],
+          "crowdedness": 0.4,
+          "conquered": "College of Pharmacy",
+          "image": "https://www.purdueforlife.org/app/uploads/Admissions-Reception-Desk.png"
+        },
+        {
+          "id": "KRAN",
+          "coordinates": [
+            { "latitude": 40.42385, "longitude": -86.911272 },
+            { "latitude": 40.42385, "longitude": -86.910506 },
+            { "latitude": 40.4235, "longitude": -86.910506 },
+            { "latitude": 40.4235, "longitude": -86.911272 }
+          ],
+          "crowdedness": 0.2,
+          "conquered": "College of Science",
+          "image": "https://032314424b.cbaul-cdnwnd.com/a475f2b7d303a4959f116aa9a1c9c5b1/200000002-9400f94010/contact-us.jpg?ph=032314424b"
+        },
+        {
+          "id": "PMU",
+          "coordinates": [
+            { "latitude": 40.425461, "longitude": -86.910466 },
+            { "latitude": 40.424567, "longitude": -86.910466 },
+            { "latitude": 40.424567, "longitude": -86.911704 },
+            { "latitude": 40.425461, "longitude": -86.911724 }
+          ],
+          "crowdedness": 0.4,
+          "conquered": "Purdue Polytechnic",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFISM_CpygBAUR-WepzFNw-735K_tjuYu98g&s"
+        },
+        {
+          "id": "RAWL",
+          "coordinates": [
+            { "latitude": 40.42388, "longitude": -86.90925 },
+            { "latitude": 40.42366, "longitude": -86.90925 },
+            { "latitude": 40.42366, "longitude": -86.910215 },
+            { "latitude": 40.42388, "longitude": -86.910215 }
+          ],
+          "crowdedness": 0.2,
+          "conquered": "College of Engineering",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtgxSG_I6vqC6Aid1Bk3G88FYL-214PXtFSw&s"
+        },
+        {
+          "id": "LWSN",
+          "coordinates": [
+            { "latitude": 40.428163, "longitude": -86.91678 },
+            { "latitude": 40.427424, "longitude": -86.91678 },
+            { "latitude": 40.427424, "longitude": -86.917193 },
+            { "latitude": 40.428163, "longitude": -86.917193 }
+          ],
+          "crowdedness": 0.1,
+          "conquered": "College of Engineering",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjVd0K8JfZHQpJih_iyx2bujwUTy8M6WJf3Q&s"
+        },
+        {
+          "id": "CREC",
+          "coordinates": [
+            { "latitude": 40.4293, "longitude": -86.9219 },
+            { "latitude": 40.427575, "longitude": -86.9219 },
+            { "latitude": 40.427575, "longitude": -86.923 },
+            { "latitude": 40.4293, "longitude": -86.923 }
+          ],
+          "crowdedness": 0.2,
+          "conquered": "College of Liberal Arts",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMBpKWG_v88m9-JOmb6vHBQbxuRis_sJP2Og&s"
+        },
+        {
+          "id": "KRCH",
+          "coordinates": [
+            { "latitude": 40.427773, "longitude": -86.920796 },
+            { "latitude": 40.427485, "longitude": -86.920796 },
+            { "latitude": 40.427485, "longitude": -86.921602 },
+            { "latitude": 40.427773, "longitude": -86.921602 }
+          ],
+          "crowdedness": 0.2,
+          "conquered": "Exploratory Studies",
+          "image": "https://www.sasaki.com/wp-content/uploads/2019/10/01-Krach_CornerView_2014_8789-1800x1200.jpg"
+        },
+        {
+          "id": "BHEE",
+          "coordinates": [
+            { "latitude": 40.428804, "longitude": -86.912605 },
+            { "latitude": 40.429173, "longitude": -86.911919 },
+            { "latitude": 40.428474, "longitude": -86.911152 },
+            { "latitude": 40.428076, "longitude": -86.911754 }
+          ],
+          "crowdedness": 0.2,
+          "conquered": "College of Engineering",
+          "image": "https://engineering.purdue.edu/ECE/Giving/BHEE/Spaces/graduate-wing/explorationgraduatewing-web.jpg"
+        },
+        {
+          "id": "DUDL",
+          "coordinates": [
+            { "latitude": 40.428017, "longitude": -86.911917 },
+            { "latitude": 40.428017, "longitude": -86.91078 },
+            { "latitude": 40.42697, "longitude": -86.91078 },
+            { "latitude": 40.42697, "longitude": -86.911917 }
+          ],
+          "crowdedness": 0.7,
+          "conquered": "Purdue Polytechnic",
+          "image": "https://polytechnic.purdue.edu/sites/default/files/Gateway-dedication-hero-featured.jpg"
+        },
+        {
+          "id": "GRIS",
+          "coordinates": [
+            { "latitude": 40.426797, "longitude": -86.911143 },
+            { "latitude": 40.426797, "longitude": -86.910581 },
+            { "latitude": 40.426141, "longitude": -86.910581 },
+            { "latitude": 40.426797, "longitude": -86.911143 }
+          ],
+          "crowdedness": 0.15,
+          "conquered": "College of Science",
+          "image": "https://engineering.purdue.edu/IE/aboutus/aboutus/facilities/images/ext-gris-fall"
+        },
+        {
+          "id": "WTHR",
+          "coordinates": [
+            { "latitude": 40.426744, "longitude": -86.913568 },
+            { "latitude": 40.426744, "longitude": -86.912587 },
+            { "latitude": 40.426159, "longitude": -86.912587 },
+            { "latitude": 40.426159, "longitude": -86.913568 }
+          ],
+          "crowdedness": 0.4,
+          "conquered": "College of Science",
+          "image": "https://live.staticflickr.com/2768/4427166189_2d5ba41c53_c.jpg"
+        },
+        {
+          "id": "BRWN",
+          "coordinates": [
+            { "latitude": 40.426771, "longitude": -86.912427 },
+            { "latitude": 40.426771, "longitude": -86.911242 },
+            { "latitude": 40.426392, "longitude": -86.911242 },
+            { "latitude": 40.426392, "longitude": -86.912427 }
+          ],
+          "crowdedness": 0.3,
+          "conquered": "College of Science",
+          "image": "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=-8G3b-8Q3gB4kuwy5oIKDA&cb_client=search.gws-prod.gps&w=408&h=240&yaw=172.70203&pitch=0&thumbfov=100"
+        },
+        {
+          "id": "UNIV",
+          "coordinates": [
+            { "latitude": 40.425471, "longitude": -86.91534 },
+            { "latitude": 40.425471, "longitude": -86.914953 },
+            { "latitude": 40.425046, "longitude": -86.914953 },
+            { "latitude": 40.425046, "longitude": -86.91534 }
+          ],
+          "crowdedness": 0.2,
+          "conquered": "College of Liberal Arts",
+          "image": "https://www.purdueforlife.org/app/uploads/Uni-Hall-Student-gathering-area-9-2023-1024x576.jpg"
+        },
+        {
+          "id": "ME",
+          "coordinates": [
+            { "latitude": 40.428139, "longitude": -86.913594 },
+            { "latitude": 40.428733, "longitude": -86.912647 },
+            { "latitude": 40.428232, "longitude": -86.912121 },
+            { "latitude": 40.427862, "longitude": -86.912875 }
+          ],
+          "crowdedness": 0.6,
+          "conquered": "Purdue Polytechnic",
+          "image": "https://engineering.purdue.edu/MECL/assets/building-short.jpg"
+        },
+        {
+          "id": "SC",
+          "coordinates": [
+            { "latitude": 40.426794, "longitude": -86.914676 },
+            { "latitude": 40.426794, "longitude": -86.913937 },
+            { "latitude": 40.426239, "longitude": -86.913937 },
+            { "latitude": 40.426239, "longitude": -86.914676 }
+          ],
+          "crowdedness": 0.8,
+          "conquered": "College of Liberal Arts",
+          "image": "https://live.staticflickr.com/3687/19049161634_34e1eb3791_b.jpg"
+        }
+      ];
+      
+      for (const data of dataset) {
+        try {
+          await BuildingDataModel.create(data);
+          console.log(`Inserted: ${data.id}`);
+        } catch (error) {
+          console.error(`Error inserting ${data.id}: ${error.message}`);
+        }
+      }
+    } else {
+      console.log("Building dataset already exists. Skipping initialization.");
+    }
+  } catch (err) {
+    console.error("Error initializing building dataset:", err);
+  }
+};
+
+
 
 
 
@@ -58,6 +279,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
     await initializeBuildings(); // Initialize buildings only if they don’t exist
+    await initializeBuildingData(); // Initialize building data only if it doesn’t exist
 
 
 
@@ -570,7 +792,16 @@ app.post("/buildingLeaderboard/individual/monthly", async (req, res) => {
   }
 });
 
-
+// Get all buildings
+app.get("/api/buildingData", async (req, res) => {
+  try {
+    const buildings = await BuildingDataModel.find();
+    res.json({ success: true, buildings });
+  } catch (err) {
+    console.error("Error fetching buildings:", err);
+    res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+});
 
 app.post("/buildingLeaderboard/college/weekly", async (req, res) => {
   try {

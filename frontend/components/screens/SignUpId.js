@@ -86,6 +86,39 @@ const SignUpId = () => {
     setLoading(false);
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: colors.background,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 20,
+      color: colors.text,
+    },
+    input: {
+      width: "100%",
+      marginBottom: 10,
+      backgroundColor: colors.surface,
+      color: colors.text,
+    },
+    loginButton: {
+      marginTop: 10,
+      width: "100%",
+      backgroundColor: colors.primary,
+    },
+    signUpButton: {
+      marginTop: 10,
+      width: "100%",
+      borderWidth: 1,
+      borderColor: colors.primary,
+    },
+  });
+
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -136,9 +169,8 @@ const SignUpId = () => {
           mode="contained"
           onPress={handleSignUp}
           loading={loading}
-          disabled={loading}
-          style={styles.nextButton}
-          textColor={colors.text}
+          //disabled={loading}
+          style={styles.loginButton}
         >
           {loading ? "Signing Up..." : "Sign Up"}
         </Button>
