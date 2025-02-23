@@ -225,22 +225,39 @@ const SignUpInfo = () => {
           </Menu>
         </View> } */}
 
-{/* College Dropdown (Custom Modal & Scrollable) */}
-        <TouchableOpacity onPress={() => setCollegeModalVisible(true)} style={styles.dropdown}>
-          <Text>{college}</Text>
-        </TouchableOpacity>
+        {/* Custom Button Styled like a Paper Button */}
+        <Button
+          mode="outlined"
+          onPress={() => setCollegeModalVisible(true)}
+          style={styles.dropdownButton}
+          textColor={colors.text}
+        >
+          {college}
+        </Button>
 
-        <Modal visible={collegeModalVisible} transparent={true} animationType="fade">
-          <TouchableOpacity style={styles.modalOverlay} onPress={() => setCollegeModalVisible(false)} />
+        {/* Modal for College Selection */}
+        <Modal
+          visible={collegeModalVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setCollegeModalVisible(false)}
+        >
+          <TouchableOpacity
+            style={styles.modalOverlay}
+            onPress={() => setCollegeModalVisible(false)}
+          />
           <View style={styles.modalContent}>
             <ScrollView style={styles.scrollableDropdown}>
               {colleges.map((item, index) => (
                 <Button
                   key={index}
+                  mode="outlined"
                   onPress={() => {
                     setCollege(item);
                     setCollegeModalVisible(false);
                   }}
+                  style={styles.modalButton}
+                  textColor={colors.text}
                 >
                   {item}
                 </Button>
