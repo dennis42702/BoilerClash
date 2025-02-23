@@ -88,7 +88,7 @@ const SignUpId = () => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Text style={styles.title}>Sign Up - Step 1</Text>
+        <Text style={styles.title}>Account Setup</Text>
 
         <TextInput
           label="Username"
