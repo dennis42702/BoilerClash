@@ -7,12 +7,14 @@ import {
   Text,
   PaperProvider,
   Menu,
+  useTheme,
 } from "react-native-paper";
 import axios from "axios";
 
 const SignUpInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { colors } = useTheme();
   const { userId } = route.params;
 
   const [firstName, setFirstName] = useState("");
@@ -121,6 +123,7 @@ const SignUpInfo = () => {
           onChangeText={setFirstName}
           mode="outlined"
           style={styles.input}
+          activateOutlineColor={colors.primary}
         />
 
         <TextInput
@@ -129,6 +132,7 @@ const SignUpInfo = () => {
           onChangeText={setLastName}
           mode="outlined"
           style={styles.input}
+          activateOutlineColor={colors.primary}
         />
 
         {/* College Dropdown */}
@@ -141,6 +145,7 @@ const SignUpInfo = () => {
                 mode="outlined"
                 onPress={() => setCollegeMenuVisible(true)}
                 style={styles.dropdown}
+                textColor={colors.text}
               >
                 {college}
               </Button>
@@ -166,6 +171,7 @@ const SignUpInfo = () => {
                 mode="outlined"
                 onPress={() => setYearMenuVisible(true)}
                 style={styles.dropdown}
+                textColor={colors.text}
               >
                 {year}
               </Button>
@@ -184,6 +190,7 @@ const SignUpInfo = () => {
             mode={gender === "Male" ? "contained" : "outlined"}
             onPress={() => setGender("Male")}
             style={styles.genderButton}
+            textColor={colors.text}
           >
             Male
           </Button>
@@ -191,6 +198,7 @@ const SignUpInfo = () => {
             mode={gender === "Female" ? "contained" : "outlined"}
             onPress={() => setGender("Female")}
             style={styles.genderButton}
+            textColor={colors.text}
           >
             Female
           </Button>
@@ -204,6 +212,7 @@ const SignUpInfo = () => {
             loading={loading}
             disabled={loading}
             style={styles.submitButton}
+            textColor={colors.text}
           >
             {loading ? "Submitting..." : "Submit"}
           </Button>
@@ -225,10 +234,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "black",
   },
   input: {
     width: "100%",
     marginBottom: 10,
+    backgroundColor: "white",
   },
   dropdownWrapper: {
     width: "100%",
@@ -253,6 +264,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    backgroundColor: "blue",
   },
   backButton: {
     flex: 1,
