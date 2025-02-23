@@ -1,0 +1,30 @@
+[
+    {
+        "day": "Monday",
+        "minutes": 142
+    },
+    {
+        "day": "Tuesday",
+        "minutes": 86
+    },
+    {
+        "day": "Wednesday",
+        "minutes": 32
+    },
+    {
+        "day": "Thursday",
+        "minutes": 170
+    },
+    {
+        "day": "Friday",
+        "minutes": 105
+    },
+    {
+        "day": "Saturday",
+        "minutes": 34
+    },
+    {
+        "day": "Sunday",
+        "minutes": 67
+    }
+]
