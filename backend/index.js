@@ -152,27 +152,50 @@ mongoose.connect(process.env.MONGO_URI)
 
   
   app.post("/newSession", async (req, res) => {
+    console.log(new Date());
     try {
+    
       const { userId, buildingName, startTime, endTime } = req.body;
+      console.log("sibal");
+      console.log(typeof userId);
+      
       
       if (!userId || !buildingName || !startTime || !endTime) {
         return res.status(400).json({ success: false, message: "Missing required fields" });
       }
 
-      const building = await BuildingModel.findOne({ buildingName });
+      const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
 
+      const building = await BuildingModel.findOne({ buildingName });
       if (!building) {
         return res.status(404).json({ success: false, message: "Building not found" });
       }
+      console.log("sibal");
 
       const buildingId = building._id;
+      parsedStartTime = new Date(startTime);
+      parsedEndTime = new Date(endTime);
 
-      const duration = (endTime - startTime) / (1000 * 60 * 60);
+      console.log("endTime type",typeof endTime);
+      console.log("startTime type", typeof startTime);
+      console.log( endTime);
+      console.log( startTime);
+
+      const duration = (parsedEndTime - parsedStartTime) / (1000 * 60 * 60);
+      console.log("se");
       if (duration < 0) {
         return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
       }
   
-      const newSession = await SessionModel.create({ buildingId, userId, startTime, endTime, duration });
+      const newSession = await SessionModel.create({ 
+        buildingId, userId, startTime: parsedStartTime, endTime:parsedEndTime, duration,
+        username: user.username,
+      });
+      console.log(newSession);
+
   
       res.status(201).json({ success: true, message: "Item created", sessionId: newSession._id, data: newSession }); //send sessionId;
   
@@ -192,8 +215,52 @@ mongoose.connect(process.env.MONGO_URI)
       }
       
 
+      const session = await SessionModel.findById(sessionId);
+
+      if (!session) {
+        return res.status(404).json({ success: false, message: "Session not found" });
+      }
+
+      const sStartTime = session.startTime  ;
+      console.log("utype: ", typeof sStartTime)
+      console.log("utype: ", typeof endTime)
+      const parsedEndTime = new Date(endTime);
+
+      const duration = (parsedEndTime - sStartTime) / (1000 * 60 * 60);
+      console.log("uduraton: ", duration);
+
+      if (duration < 0) {
+        return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
+      }
+
+      session.endTime = parsedEndTime;
+      session.duration = duration;
+      await session.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Session updated successfully",
+        updatedSession: session,
+        addedHours: duration
+      });
+
+  
+    } catch (error) {
+      console.error("Error in updateSession:", error);
+      res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+  });
 
 
+  app.post("/individualLeaderboard", async (req, res) => {
+    try {
+      const { sessionId, endTime } = req.body;
+
+      
+      if (!sessionId || !endTime) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+      }
+      
       const session = await SessionModel.findById(sessionId);
 
       if (!session) {
@@ -224,8 +291,6 @@ mongoose.connect(process.env.MONGO_URI)
       res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
   });
-
-
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
