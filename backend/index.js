@@ -254,9 +254,15 @@ const initializeBuildingData = async () => {
           "image": "https://live.staticflickr.com/3687/19049161634_34e1eb3791_b.jpg"
         }
       ];
-
-      await BuildingDataModel.insertMany(dataset);
-      console.log("Building dataset inserted successfully.");
+      
+      for (const data of dataset) {
+        try {
+          await BuildingDataModel.create(data);
+          console.log(`Inserted: ${data.id}`);
+        } catch (error) {
+          console.error(`Error inserting ${data.id}: ${error.message}`);
+        }
+      }
     } else {
       console.log("Building dataset already exists. Skipping initialization.");
     }
@@ -270,6 +276,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
     await initializeBuildings(); // Initialize buildings only if they don’t exist
+    await initializeBuildingData(); // Initialize building data only if it doesn’t exist
 
 
 
