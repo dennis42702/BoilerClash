@@ -22,7 +22,7 @@ const App = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const storedUserId = await AsyncStorage.getItem("email");
+        const storedUserId = await AsyncStorage.getItem("userId");
         setIsLoggedIn(!!storedUserId);
         console.log("Login status checked:", !!storedUserId);
       } catch (error) {
@@ -39,6 +39,7 @@ const App = () => {
 
   return (
     <PaperProvider theme={theme}>
+      {/* <Text>Welcome to the app!<?/Text> */}
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"

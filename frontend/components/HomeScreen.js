@@ -14,10 +14,9 @@ const MapRoute = () => <MapFragment />;
 const ProfileRoute = () => <ProfileFragment />;
 
 const HomeScreen = () => {
-   const navigation = useNavigation();
-    const route = useRoute();
-    const { userId } = route.params; 
-  
+  const navigation = useNavigation();
+  // const route = useRoute();
+  // const { userId } = route.params;
 
   const { colors } = useTheme();
 
