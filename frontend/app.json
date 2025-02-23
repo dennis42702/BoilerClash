@@ -14,22 +14,16 @@
         "NSLocationWhenInUseUsageDescription": "This app needs your location to provide better services.",
         "NSLocationAlwaysUsageDescription": "This app needs access to your location even when running in the background.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs your location to provide better services.",
-        "UIBackgroundModes": [
-          "location",
-          "fetch"
-        ]
+        "UIBackgroundModes": ["location", "fetch"]
       }
     },
     "android": {
       "config": {
         "googleMaps": {
-          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+          "apiKey": "AIzaSyCFiHBEhfPJNGWteBDHgjMC-sAtfBd9ur4"
         }
       },
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ],
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
