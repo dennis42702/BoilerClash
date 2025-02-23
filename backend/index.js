@@ -19,6 +19,30 @@ const PORT = process.env.PORT || 5003;
 app.use(bodyParser.json());
 app.use(cors());
 
+async function updateBuildingIds() {
+  try {
+    await SessionModel.updateMany(
+      { buildingId: new mongoose.Types.ObjectId("67ba7792bd8f881ee5a90440") },
+      { $set: { buildingId: new mongoose.Types.ObjectId("67baedd1b652c573338f5fd6") } }
+    );
+
+    await SessionModel.updateMany(
+      { buildingId: new mongoose.Types.ObjectId("67ba7792bd8f881ee5a9044a") },
+      { $set: { buildingId: new mongoose.Types.ObjectId("67baedd1b652c573338f5fe4") } }
+    );
+
+    await SessionModel.updateMany(
+      { buildingId: new mongoose.Types.ObjectId("67ba7792bd8f881ee5a90449") },
+      { $set: { buildingId: new mongoose.Types.ObjectId("67baedd1b652c573338f5fe3") } }
+    );
+
+    console.log("Building IDs updated successfully!");
+  } catch (error) {
+    console.error("Error updating building IDs:", error);
+  }
+}
+
+
 const initializeBuildings = async () => {
   try {
     const existingBuildings = await BuildingModel.countDocuments();
@@ -285,13 +309,18 @@ const initializeBuildingData = async () => {
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
+
+
     await initializeBuildings(); // Initialize buildings only if they don’t exist
     await initializeBuildingData(); // Initialize building data only if it doesn’t exist
 
+ 
 
 
   })
-  .catch(err => console.error("MongoDB Connection Failed:", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
 app.post("/signup", async (req, res) => {
   try {
