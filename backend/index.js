@@ -153,9 +153,9 @@ mongoose.connect(process.env.MONGO_URI)
   
   app.post("/newSession", async (req, res) => {
     try {
-      const { userId, buildingName, startTime, endTime, duration } = req.body;
+      const { userId, buildingName, startTime, endTime } = req.body;
       
-      if (!userId || !buildingName || !startTime || !endTime || !duration) {
+      if (!userId || !buildingName || !startTime || !endTime) {
         return res.status(400).json({ success: false, message: "Missing required fields" });
       }
 
@@ -166,6 +166,8 @@ mongoose.connect(process.env.MONGO_URI)
       }
 
       const buildingId = building._id;
+
+      const duration = (endTime - startTime) / (1000 * 60 * 60);
   
       const newSession = await SessionModel.create({ buildingId, userId, startTime, endTime, duration });
   
