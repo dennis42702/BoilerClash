@@ -14,6 +14,7 @@ const LOCATION_TASK_NAME = "background-location-task";
 let cachedUserId = null;
 let prevTimestamp = null;
 let prevLocation = null;
+let sessionId = null;
 let iteration = 0;
 
 // Define the background task
@@ -52,8 +53,32 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       if (currentBuilding != prevLocation) {
         prevLocation = currentBuilding;
         prevTimestamp = currentTime;
+        sessionId = null;
       } else {
-        if (currentTime - prevTimestamp >= SESSION_MINIMUM_THRESHOLD) {
+        if (
+          currentTime - prevTimestamp > SESSION_MINIMUM_THRESHOLD &&
+          (currentTime - prevTimestamp) / INBETWEEN_SESSION_THRESHOLD >
+            iteration &&
+          sessionId
+        ) {
+          console.log("Updating Data to Server");
+
+          const response = await axios.post(
+            "http://10.186.187.54:5003/updateSession",
+            {
+              sessionId: sessionId,
+              endTime: currentTime,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              validateStatus: (status) => status < 500,
+            }
+          );
+
+          iteration++;
+        } else if (currentTime - prevTimestamp >= SESSION_MINIMUM_THRESHOLD) {
           console.log("Sending Data to Server");
 
           const response = await axios.post(
@@ -76,13 +101,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
           if (response.status === 201) {
             console.log("Session Id Received:", response.data.sessionId);
+            sessionId = response.data.sessionId;
           }
-        } else if (
-          currentTime - prevTimestamp > SESSION_MINIMUM_THRESHOLD &&
-          (currentTime - prevTimestamp) / INBETWEEN_SESSION_THRESHOLD >
-            iteration
-        ) {
-          console.log("Updating to the server");
         }
       }
     }

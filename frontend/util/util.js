@@ -3,7 +3,7 @@ import buildingData from "../components/buildings.json";
 const collegeToIconMap = new Map([
   ["College of Agriculture", "corn"],
   ["Daniels School of Business", "handshake"],
-  ["College of Education", "book-education"],
+  ["College of Education", "book_education"],
   ["College of Engineering", "cog"],
   ["Exploratory Studies", "magnify"],
   ["College of Health and Human Sciences", "stethoscope"],

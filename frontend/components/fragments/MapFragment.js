@@ -1,13 +1,28 @@
 import React, { useState, useRef } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
-import MapView, { Marker, Polygon } from "react-native-maps";
+import MapView, { Callout, Marker, Polygon } from "react-native-maps";
 import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import buildingsData from "../buildings.json";
 import { collegeToIcon } from "../../util/util";
+import { requestFormReset } from "react-dom";
 
 const MapFragment = () => {
   const mapRef = useRef(null);
+
+  const iconImages = {
+    corn: require("../../assets/corn.png"),
+    handshake: require("../../assets/handshake.png"),
+    book_education: require("../../assets/book_education.png"),
+    cog: require("../../assets/cog.png"),
+    magnify: require("../../assets/magnify.png"),
+    stethoscope: require("../../assets/stethoscope.png"),
+    book: require("../../assets/book.png"),
+    pill: require("../../assets/pill.png"),
+    monitor: require("../../assets/monitor.png"),
+    flask: require("../../assets/flask.png"),
+    paw: require("../../assets/paw.png"),
+  };
 
   const customMapStyle = [
     {
@@ -118,8 +133,23 @@ const MapFragment = () => {
             <Marker
               title={building.id}
               coordinate={calculatePolygonCenter(building.coordinates)}
-              icon="castle"
-            ></Marker>
+              icon={require("../../assets/castle.png")}
+              // icon={iconImages[collegeToIcon(building.conquered)]}
+            >
+              <Callout>
+                <Card style={styles.calloutCard}>
+                  <Card.Content>
+                    <Text variant="titleMedium" style={styles.buildingName}>
+                      {building.building_name}HI
+                    </Text>
+                    <Text>
+                      Crowdedness: {(building.crowdedness * 100).toFixed(0)}%
+                    </Text>
+                    <Text>Conquered by: {building.conquered}</Text>
+                  </Card.Content>
+                </Card>
+              </Callout>
+            </Marker>
           </React.Fragment>
         ))}
       </MapView>
@@ -156,6 +186,17 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     top: 0,
+  },
+  calloutCard: {
+    width: 200,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    elevation: 5,
+  },
+  buildingName: {
+    fontWeight: "bold",
+    marginBottom: 5,
   },
 });
 
