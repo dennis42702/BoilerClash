@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import {
   Dialog,
@@ -14,6 +14,7 @@ import {
 import ToggleButtonGroup from "../subcomponents/ToggleButtonGroup";
 import ToggleButtonCategories from "../subcomponents/ToggleButtonCategories";
 import ToggleButtonInterval from "../subcomponents/ToggleButtonInterval";
+import axios from "axios";
 
 const leaderboardData = {
   leaderboard: [
@@ -36,6 +37,21 @@ const leaderboardData = {
   ],
 };
 
+const availableBuildings = [
+  "WALC",
+  "HICKS",
+  "HAAS",
+  "DUDL",
+  "LMBS",
+  "LWSN",
+  "LILY",
+  "KRCH",
+  "CREC",
+  "STEW",
+  "KRAN",
+  "RAWL",
+];
+
 const LeaderboardFragment = ({
   weeklyIndividualLeaderboard,
   monthlyIndividualLeaderboard,
@@ -49,6 +65,8 @@ const LeaderboardFragment = ({
 
   const { colors } = useTheme();
 
+  const [data, setData] = useState(weeklyIndividualLeaderboard.leaderboard);
+
   // Dropdown State
   const [category, setCategory] = useState("TOTAL");
   const [categoryMenuVisible, setCategoryMenuVisible] = useState(false);
@@ -60,20 +78,79 @@ const LeaderboardFragment = ({
   const [timeFrame, setTimeFrame] = useState("WEEKLY");
 
   // Building Selection State
-  const [building, setBuilding] = useState("Select College");
+  const [building, setBuilding] = useState("WALC");
   const [buildingMenuVisible, setBuildingMenuVisible] = useState(false);
 
-  // Sample Leaderboard Data
+  useEffect(() => {
+    const updateData = async () => {
+      let monthlyResponse;
+      if (viewType === "INDIVIDUAL") {
+        monthlyResponse = await axios.post(
+          "http://10.186.187.54:5003/buildingLeaderboard/individual/monthly",
+          { buildingName: building },
+          { headers: { "Content-Type": "application/json" } }
+        );
+      } else {
+        monthlyResponse = await axios.post(
+          "http://10.186.187.54:5003/buildingLeaderboard/college/monthly",
+          { buildingName: building },
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+      let weeklyResponse;
+      if (viewType === "INDIVIDUAL") {
+        weeklyResponse = await axios.post(
+          "http://10.186.187.54:5003/buildingLeaderboard/individual/weekly",
+          { buildingName: building },
+          { headers: { "Content-Type": "application/json" } }
+        );
+      } else {
+        weeklyResponse = await axios.post(
+          "http://10.186.187.54:5003/buildingLeaderboard/college/weekly",
+          { buildingName: building },
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
 
-  const selectData = () => {
-    if (viewType === "INDIVIDUAL") {
-      return timeFrame === "WEEKLY"
-        ? weeklyIndividualLeaderboard.leaderboard
-        : monthlyIndividualLeaderboard.leaderboard;
-    } else {
-      return weeklyIndividualLeaderboard.leaderboard; // Placeholder for team leaderboard
+      const monthlyLeaderboard =
+        monthlyResponse.data.leaderboardByBuilding || [];
+      const weeklyLeaderboard = weeklyResponse.data.leaderboardByBuilding || [];
+
+      console.log("Fetched Weekly Data:", weeklyLeaderboard);
+      console.log("Fetched Monthly Data:", monthlyLeaderboard);
+
+      if (category === "BUILDING") {
+        console.log("THATHATHAT");
+        if (timeFrame === "WEEKLY") {
+          const rankedData = weeklyLeaderboard.map((item, index) => ({
+            ...item,
+            rank: index + 1, // Assign rank based on index
+          }));
+          setData(rankedData);
+          console.log("Updated Weekly Building Data", rankedData);
+        }
+        if (timeFrame === "MONTHLY") {
+          const rankedData = monthlyLeaderboard.map((item, index) => ({
+            ...item,
+            rank: index + 1, // Assign rank based on index
+          }));
+          setData(rankedData);
+          console.log("Updated Monthly Building Data", rankedData);
+        }
+      }
+    };
+
+    updateData();
+
+    if (category === "TOTAL") {
+      if (timeFrame === "WEEKLY") {
+        console.log("THISTHISTHISTHIS");
+        setData(weeklyIndividualLeaderboard.leaderboard);
+      } else {
+        setData(monthlyIndividualLeaderboard.leaderboard);
+      }
     }
-  };
+  }, [building, category, timeFrame]);
 
   // Renders each leaderboard entry
   const renderItem = ({ item }) => {
@@ -104,12 +181,16 @@ const LeaderboardFragment = ({
               <Text style={styles.major}>{item.college}</Text>
             </View>
             <Text style={styles.hr}>
-              {Math.round(item.weeklyStudyHours * 60)}
+              {category === "TOTAL"
+                ? timeFrame === "MONTHLY"
+                  ? Math.round(item.monthlyStudyHours * 60)
+                  : Math.round(item.weeklyStudyHours * 60)
+                : Math.round(item.totalDuration * 60)}
             </Text>
           </View>
         </Card>
         <View style={styles.separator} />
-        </>
+      </>
     );
   };
 
@@ -196,9 +277,39 @@ const LeaderboardFragment = ({
         <ToggleButtonGroup onPress={(viewType) => setViewType(viewType)} />
       </View>
 
+      {/* Conditionally Render Building Dropdown */}
+      {category === "BUILDING" && (
+        <View style={styles.buildingDropdownContainer}>
+          <Menu
+            visible={buildingMenuVisible}
+            onDismiss={() => setBuildingMenuVisible(false)}
+            anchor={
+              <Button
+                onPress={() => setBuildingMenuVisible(true)}
+                mode="outlined"
+                style={styles.dropdownButton}
+                textColor={colors.text}
+              >
+                {building}
+              </Button>
+            }
+          >
+            {availableBuildings.map((buildingName) => (
+              <Menu.Item
+                key={buildingName}
+                onPress={() => {
+                  setBuilding(buildingName);
+                  setBuildingMenuVisible(false);
+                }}
+                title={buildingName}
+              />
+            ))}
+          </Menu>
+        </View>
+      )}
       {/* Leaderboard List */}
       <FlatList
-        data={selectData()}
+        data={data}
         keyExtractor={(item) => item.rank.toString()}
         renderItem={renderItem}
       />

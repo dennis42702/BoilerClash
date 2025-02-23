@@ -1,8 +1,16 @@
 // HomeScreen.js
 import React, { useState, useEffect } from "react";
-import { BottomNavigation, Text, useTheme } from "react-native-paper";
+import {
+  BottomNavigation,
+  Portal,
+  Dialog,
+  Text,
+  Paragraph,
+  Button,
+  useTheme,
+} from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, BackHandler, Alert } from "react-native";
 import LeaderboardFragment from "./fragments/LeaderboardFragment";
 import MapFragment from "./fragments/MapFragment";
 import ProfileFragment from "./fragments/ProfileFragment";
@@ -14,13 +22,21 @@ const ProfileRoute = () => <ProfileFragment />;
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  // const route = useRoute();
-  // const { userId } = route.params;
+  const route = useRoute();
+  const { userId } = route.params;
 
   const [weeklyIndividualLeaderboard, setWeeklyIndividualLeaderboard] =
     useState([]);
   const [monthlyIndividualLeaderboard, setMonthlyIndividualLeaderboard] =
     useState([]);
+  const [userInfo, setUserInfo] = useState({});
+  const [visible, setVisible] = useState(false);
+
+  // Show dialog
+  const showDialog = () => setVisible(true);
+
+  // Hide dialog
+  const hideDialog = () => setVisible(false);
 
   const { colors } = useTheme();
 
@@ -47,7 +63,7 @@ const HomeScreen = () => {
       />
     ),
     map: MapRoute,
-    profile: ProfileRoute,
+    profile: () => <ProfileFragment userId={userId} />,
   });
 
   const styles = StyleSheet.create({
@@ -94,7 +110,23 @@ const HomeScreen = () => {
   useEffect(() => {
     fetchWeeklyIndividualLeaderboard();
     fetchMonthlyIndividualLeaderboard();
+
+    const backAction = () => {
+      showDialog();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
   }, []);
+
+  // Exit the app
+  const handleExitApp = () => {
+    BackHandler.exitApp();
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -105,6 +137,18 @@ const HomeScreen = () => {
         barStyle={{ backgroundColor: colors.white }}
         activeIndicatorStyle={{ backgroundColor: colors.light_grey }}
       />
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Exit App</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>Are you sure you want to exit the app?</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Cancel</Button>
+            <Button onPress={handleExitApp}>Exit</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 };

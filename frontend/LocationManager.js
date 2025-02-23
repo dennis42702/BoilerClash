@@ -6,9 +6,9 @@ import { findBuildingByCoordinate } from "./util/util";
 import axios from "axios";
 import { endAsyncEvent } from "react-native/Libraries/Performance/Systrace";
 
-const updateInterval = 5000; // 1 second
-const SESSION_MINIMUM_THRESHOLD = 5000; // 3 seconds
-const INBETWEEN_SESSION_THRESHOLD = 5000; // 3 seconds
+const updateInterval = 20000; // 1 second
+const SESSION_MINIMUM_THRESHOLD = 20000; // 3 seconds
+const INBETWEEN_SESSION_THRESHOLD = 20000; // 3 seconds
 
 const LOCATION_TASK_NAME = "background-location-task";
 let cachedUserId = null;

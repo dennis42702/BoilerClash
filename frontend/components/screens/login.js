@@ -10,6 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "../../CONST";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -20,13 +21,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    console.log("Login button pressed");
-    const userId = "1";
-    navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
+    // console.log("Login button pressed");
+    // const userId = "1";
+    // navigation.replace("HomeScreen", { userId }); // Navigate to Home Screen
 
-    setLoading(false);
-    console.log("Login button pressed");
-    return;
+    // setLoading(false);
+    // console.log("Login button pressed");
+    // return;
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
       return;
@@ -43,7 +44,7 @@ const Login = () => {
       // return;
 
       const response = await axios.post(
-        "http://10.186.124.108:5003/login",
+        `${API_URL}/login`,
         {
           email: email,
           password: password,
@@ -60,7 +61,7 @@ const Login = () => {
         //await AsyncStorage.setItem("email", email, () =>
         // console.log("email saved")
         //);
-        navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
+        navigation.replace("HomeScreen", { userId }); // Navigate to Home Screen
       } else {
         Alert.alert("Login Failed", response.data.message);
       }

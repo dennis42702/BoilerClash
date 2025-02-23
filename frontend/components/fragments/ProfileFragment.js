@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView, FlatList, Dimensions, TouchableOpacity } from "react-native";
-import { Text, Button, PaperProvider, Avatar, DataTable } from "react-native-paper";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
+import {
+  Text,
+  Button,
+  PaperProvider,
+  Avatar,
+  DataTable,
+} from "react-native-paper";
 import axios from "axios";
 import { BarChart } from "react-native-chart-kit";
 import dailyUsageData from "../../data/dailyUsage.json";
 import weeklyUsageData from "../../data/weeklyUsage.json";
 import monthlyUsageData from "../../data/monthlyUsage.json";
 import { useTheme } from "react-native-paper";
+import { API_URL } from "../../CONST";
 
 // Get screen width for charts
 const screenWidth = Dimensions.get("window").width;
 
-const ProfileFragment = () => {
+const ProfileFragment = ({ userId }) => {
   const { colors } = useTheme();
   // State for time period selection
   const [timePeriod, setTimePeriod] = useState("WEEK");
@@ -21,14 +35,13 @@ const ProfileFragment = () => {
   const [dailyUsage, setDailyUsage] = useState([]);
   const [weeklyUsage, setWeeklyUsage] = useState([]);
   const [monthlyUsage, setMonthlyUsage] = useState([]);
-
-  // User Data
-  const userData = {
+  const [userData, setUserData] = useState({
     username: "john_doe",
-    name: "John Doe",
-    classMajor: "Junior, Computer Science",
-    profilePic: "https://source.unsplash.com/100x100/?face",
-  };
+    firstName: "John",
+    lastName: "Doe",
+    year: "Junior",
+    college: "College of Science",
+  });
 
   // Study Time Data
   const studyData = [
@@ -94,8 +107,25 @@ const ProfileFragment = () => {
 
   // Fetch data when `timePeriod` changes
   useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
     fetchUsageData();
   }, [timePeriod]);
+
+  const fetchUserData = async () => {
+    const response = await axios.post(
+      `${API_URL}/profile`,
+      {
+        userId: userId,
+      },
+      {
+        validateStatus: (status) => status < 500,
+      }
+    );
+    setUserData(response.data.profile);
+  };
 
   const fetchUsageData = async () => {
     setLoading(true);
@@ -117,14 +147,16 @@ const ProfileFragment = () => {
   return (
     <PaperProvider>
       <ScrollView contentContainerStyle={styles.container}>
-
         {/* User Profile Section */}
         <View style={styles.profileSection}>
-          <Avatar.Image size={60} source={{ uri: userData.profilePic }} />
+          {/* <Avatar.Image size={60} source={{ uri: userData.profilePic }} /> */}
           <View style={styles.userInfo}>
-            <Text style={styles.username}>{userData.username}</Text>
-            <Text style={styles.name}>{userData.name}</Text>
-            <Text style={styles.classMajor}>{userData.classMajor}</Text>
+            <Text style={styles.username}>Username: {userData.username}</Text>
+            <Text style={styles.name}>
+              Name: {userData.firstName} {userData.lastName}
+            </Text>
+            <Text style={styles.classMajor}>{userData.year}</Text>
+            <Text style={styles.classMajor}>{userData.college}</Text>
           </View>
         </View>
 
@@ -133,10 +165,18 @@ const ProfileFragment = () => {
           {["TODAY", "WEEK", "MONTH"].map((option) => (
             <TouchableOpacity
               key={option}
-              style={[styles.toggleButton, timePeriod === option && styles.activeButton]}
+              style={[
+                styles.toggleButton,
+                timePeriod === option && styles.activeButton,
+              ]}
               onPress={() => setTimePeriod(option)}
             >
-              <Text style={[styles.toggleText, timePeriod === option && styles.activeText]}>
+              <Text
+                style={[
+                  styles.toggleText,
+                  timePeriod === option && styles.activeText,
+                ]}
+              >
                 {option}
               </Text>
             </TouchableOpacity>
@@ -153,7 +193,7 @@ const ProfileFragment = () => {
               <Text style={styles.chartTitle}>Hourly Usage</Text>
               <BarChart
                 data={{
-                  labels: ["0 AM", "6 AM", "12 PM", "6 PM"],   // 12-hour format
+                  labels: ["0 AM", "6 AM", "12 PM", "6 PM"], // 12-hour format
                   datasets: [{ data: dailyUsage.map((item) => item.minutes) }],
                 }}
                 width={screenWidth - 40}
@@ -161,11 +201,11 @@ const ProfileFragment = () => {
                 fromZero
                 yAxisLabel=""
                 yAxisSuffix="m"
-                yAxisInterval={15} 
+                yAxisInterval={15}
                 chartConfig={{
                   backgroundGradientFrom: colors.background,
                   backgroundGradientTo: colors.surface,
-                  color: (opacity = 1) => colors.primary, 
+                  color: (opacity = 1) => colors.primary,
                   barPercentage: 0.1,
                   barRadius: 4,
                 }}
@@ -178,7 +218,7 @@ const ProfileFragment = () => {
               <Text style={styles.chartTitle}>Daily Usage</Text>
               <BarChart
                 data={{
-                  labels: ["S", "M", "T", "W", "T", "F", "S"],  // Short format for days
+                  labels: ["S", "M", "T", "W", "T", "F", "S"], // Short format for days
                   datasets: [{ data: weeklyUsage.map((item) => item.minutes) }],
                 }}
                 width={screenWidth - 40}
@@ -202,8 +242,10 @@ const ProfileFragment = () => {
               <Text style={styles.chartTitle}>Monthly Weekly Usage</Text>
               <BarChart
                 data={{
-                  labels: ["Week 1", "Week 2", "Week 3", "Week 4"],  // Dynamically map weeks
-                  datasets: [{ data: monthlyUsage.map((item) => item.minutes) }],
+                  labels: ["Week 1", "Week 2", "Week 3", "Week 4"], // Dynamically map weeks
+                  datasets: [
+                    { data: monthlyUsage.map((item) => item.minutes) },
+                  ],
                 }}
                 width={screenWidth - 40}
                 height={220}
@@ -220,7 +262,6 @@ const ProfileFragment = () => {
               />
             </>
           )}
-
         </View>
 
         {/* Study Time Table */}
@@ -241,12 +282,9 @@ const ProfileFragment = () => {
             )}
           />
         </DataTable>
-
       </ScrollView>
     </PaperProvider>
   );
 };
-
-
 
 export default ProfileFragment;
