@@ -4,7 +4,7 @@ const UserModel = require('./models/User');
 const SessionModel = require('./models/Session')
 const BuildingModel = require('./models/Building')
 const IndividualMonthlyLeaderboardModel = require('./models/IndividualMonthlyLeaderboard')
-const IndividualMonthlyLeaderboardModel = require('./models/IndividualWeeklyLeaderboard')
+const IndividualWeeklyLeaderboardModel = require('./models/IndividualWeeklyLeaderboard')
 const CollegeLeaderboardModel = require('./models/CollegeLeaderboard')
 const BuildingLeaderboardModel = require('./models/BuildingLeaderboard')
 
@@ -79,6 +79,7 @@ app.post("/signup", async (req, res) => {
       password: hashedPassword,
     });
 
+    console.log("step 1 sign up complete");
     res.json({ success: true, message: "Step 1 complete", userId: newUser._id });
 
 
@@ -110,6 +111,8 @@ app.post("/signup/details", async (req, res) => {
     user.gender = gender;
     await user.save();
 
+
+    console.log("step 2 sign up complete");
     res.json({ success: true, message: "Signup completed successfully!" });
 
   } catch (err) {
@@ -143,6 +146,7 @@ app.post("/login", async (req, res) => {
     }
 
     // Success login
+    console.log("login successful");
     res.json({ success: true, message: "Login successful", userId: user._id });
 
   } catch (err) {
@@ -153,11 +157,10 @@ app.post("/login", async (req, res) => {
 
 
 app.post("/newSession", async (req, res) => {
-  console.log(new Date());
+
   try {
 
     const { userId, buildingName, startTime, endTime } = req.body;
-    console.log("sibal");
     console.log(typeof userId);
 
 
@@ -174,7 +177,6 @@ app.post("/newSession", async (req, res) => {
     if (!building) {
       return res.status(404).json({ success: false, message: "Building not found" });
     }
-    console.log("sibal");
 
     const buildingId = building._id;
     parsedStartTime = new Date(startTime);
@@ -195,12 +197,12 @@ app.post("/newSession", async (req, res) => {
       buildingId, userId, startTime: parsedStartTime, endTime: parsedEndTime, duration,
       username: user.username,
     });
-    console.log(newSession);
+    console.log("new session created", newSession);
 
     user.weeklyStudyHours += duration;
     user.monthlyStudyHours += duration;
     await user.save();
-    console.log("Updated User Study Hours:", user);
+    console.log(`Updated ${user.username}'s Study Hours by ${duration}`);
 
 
     res.status(201).json({ success: true, message: "Item created", sessionId: newSession._id, data: newSession }); //send sessionId;
@@ -235,7 +237,7 @@ app.post("/updateSession", async (req, res) => {
 
     const duration = (parsedEndTime - sStartTime) / (1000 * 60 * 60);
     const previousEndTime = session.endTime;
-    console.log("uduraton: ", duration);
+    console.log(" update session duraton: ", duration);
 
     if (duration < 0) {
       return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
@@ -251,7 +253,7 @@ app.post("/updateSession", async (req, res) => {
     }
 
     const addedHours = (parsedEndTime - previousEndTime) / (1000 * 60 * 60);
-    console.log("Time added:", addedHours);
+    console.log(`Updated ${user.username}'s Study Hours by ${addedHours}`);
     if (addedHours < 0) {
       return res.status(400).json({ success: false, message: "Invalid end time. Must be after previous end time." });
     }
@@ -318,7 +320,7 @@ app.get("/individualLeaderboard/weekly", async (req, res) => {
               $project: { 
                   userId: "$_id", 
                   buildingName: "$buildingInfo.buildingName", 
-                  totalDuration: 1 
+                  totalDuration: { $round: ["$totalDuration", 3] }
               }
           }
       ]);
@@ -379,7 +381,7 @@ app.get("/individualLeaderboard/monthly", async (req, res) => {
               $project: { 
                   userId: "$_id", 
                   buildingName: "$buildingInfo.buildingName", 
-                  totalDuration: 1 
+                  totalDuration: { $round: ["$totalDuration", 3] }
               }
           }
       ]);

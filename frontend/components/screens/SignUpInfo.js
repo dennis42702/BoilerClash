@@ -113,7 +113,7 @@ const SignUpInfo = () => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Text style={styles.title}>Sign Up - Step 2</Text>
+        <Text style={styles.title}>Personal Information</Text>
 
         <TextInput
           label="First Name"
