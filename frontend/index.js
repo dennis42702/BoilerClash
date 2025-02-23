@@ -39,7 +39,6 @@ const App = () => {
 
   return (
     <PaperProvider theme={theme}>
-      {/* <Text>Welcome to the app!<?/Text> */}
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"

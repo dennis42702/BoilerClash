@@ -1,11 +1,12 @@
 // HomeScreen.js
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { BottomNavigation, Text, useTheme } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import LeaderboardFragment from "./fragments/LeaderboardFragment";
 import MapFragment from "./fragments/MapFragment";
 import ProfileFragment from "./fragments/ProfileFragment";
+import axios from "axios";
 
 const LeaderboardRoute = () => <LeaderboardFragment />;
 
@@ -17,6 +18,11 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   // const route = useRoute();
   // const { userId } = route.params;
+
+  const [weeklyIndividualLeaderboard, setWeeklyIndividualLeaderboard] =
+    useState([]);
+  const [monthlyIndividualLeaderboard, setMonthlyIndividualLeaderboard] =
+    useState([]);
 
   const { colors } = useTheme();
 
@@ -57,6 +63,35 @@ const HomeScreen = () => {
       color: "white",
     },
   });
+
+  const fetchWeeklyIndividualLeaderboard = async () => {
+    try {
+      const response = await axios.get(
+        "http://10.186.187.54:5003/individualLeaderboard/weekly"
+      );
+      setWeeklyIndividualLeaderboard(response.data);
+      console.log("Weekly Individual Leaderboard:", response.data);
+    } catch (error) {
+      console.log("SOMETHING BAD HAPPENED IN WEEKLY", error);
+    }
+  };
+
+  const fetchMonthlyIndividualLeaderboard = async () => {
+    try {
+      const response = await axios.get(
+        "http://10.186.187.54:5003/individualLeaderboard/monthly"
+      );
+      setMonthlyIndividualLeaderboard(response.data);
+      console.log("Monthly Individual Leaderboard:", response.data);
+    } catch (error) {
+      console.log("SOMETHING BAD HAPPENED IN MONTHLY", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWeeklyIndividualLeaderboard();
+    fetchMonthlyIndividualLeaderboard();
+  }, []);
 
   return (
     <SafeAreaView style={styles.safeArea}>

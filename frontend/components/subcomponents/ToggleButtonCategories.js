@@ -39,7 +39,7 @@ const ToggleButtonCategories = ({ onPress }) => {
           style={styles.toggleButton}
           onPress={() => onPress("BUILDING")}
         />
-        <ToggleButton
+        {/* <ToggleButton
           icon="school"
           value="TEAM"
           style={styles.toggleButton}
@@ -50,7 +50,7 @@ const ToggleButtonCategories = ({ onPress }) => {
           value="RAID"
           style={styles.toggleButton}
           onPress={() => onPress("RAID")}
-        />
+        /> */}
       </ToggleButton.Group>
     </View>
   );

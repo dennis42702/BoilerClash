@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import {
+  Dialog,
   Text,
   Button,
   Menu,
@@ -12,8 +13,12 @@ import {
 } from "react-native-paper";
 import ToggleButtonGroup from "../subcomponents/ToggleButtonGroup";
 import ToggleButtonCategories from "../subcomponents/ToggleButtonCategories";
+import ToggleButtonInterval from "../subcomponents/ToggleButtonInterval";
 
-const LeaderboardFragment = () => {
+const LeaderboardFragment = ({
+  weeklyIndividualLeaderboard,
+  monthlyIndividualLeaderboard,
+}) => {
   const { colors } = useTheme();
 
   // Dropdown State
@@ -22,6 +27,8 @@ const LeaderboardFragment = () => {
 
   const [viewType, setViewType] = useState("INDIVIDUAL");
   const [viewTypeMenuVisible, setViewTypeMenuVisible] = useState(false);
+
+  const [interval, setInterval] = useState("WEEKLY");
 
   // Sample Leaderboard Data
   const leaderboardData = [
@@ -155,6 +162,8 @@ const LeaderboardFragment = () => {
       {/* Dropdown Menus */}
       <View style={styles.dropdownContainer}>
         <ToggleButtonCategories onPress={(category) => setCategory(category)} />
+
+        <ToggleButtonInterval onPress={(interval) => setInterval(interval)} />
 
         {/* Right Dropdown */}
         <ToggleButtonGroup onPress={(viewType) => setViewType(viewType)} />

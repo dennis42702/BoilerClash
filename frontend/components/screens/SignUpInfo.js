@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
-import { TextInput, Button, Text, PaperProvider, Menu } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  Text,
+  PaperProvider,
+  Menu,
+} from "react-native-paper";
 import axios from "axios";
 
 const SignUpInfo = () => {
@@ -42,12 +48,21 @@ const SignUpInfo = () => {
   // Function to handle Sign Up Submission
   const handleSubmit = async () => {
     if (!userId) {
-      Alert.alert("Error", "User ID is missing. Please restart the signup process.");
+      Alert.alert(
+        "Error",
+        "User ID is missing. Please restart the signup process."
+      );
       return;
     }
 
     // Check if required fields are filled
-    if (!firstName || !lastName || college === "Select College" || year === "Select Class Year" || !gender) {
+    if (
+      !firstName ||
+      !lastName ||
+      college === "Select College" ||
+      year === "Select Class Year" ||
+      !gender
+    ) {
       Alert.alert("Error", "Please fill all fields.");
       return;
     }
@@ -66,7 +81,7 @@ const SignUpInfo = () => {
 
     try {
       const response = await axios.post(
-        "http://10.186.105.111:5003/signup/details",
+        "http://10.186.187.54:5003/signup/details",
         {
           userId,
           firstName,
@@ -132,7 +147,11 @@ const SignUpInfo = () => {
             }
           >
             {colleges.map((item, index) => (
-              <Menu.Item key={index} onPress={() => setCollege(item)} title={item} />
+              <Menu.Item
+                key={index}
+                onPress={() => setCollege(item)}
+                title={item}
+              />
             ))}
           </Menu>
         </View>

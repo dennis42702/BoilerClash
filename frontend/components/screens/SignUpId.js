@@ -6,7 +6,7 @@ import axios from "axios";
 
 const SignUpId = () => {
   const navigation = useNavigation();
-  
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,7 +51,7 @@ const SignUpId = () => {
     if (!validateInput()) {
       return; // Stop execution if validation fails
     }
-    
+
     if (!username || !email || !password) {
       Alert.alert("Error", "All fields are required.");
       return;
@@ -60,7 +60,7 @@ const SignUpId = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://10.186.105.111:5003/signup", {
+      const response = await axios.post("http://10.186.187.54:5003/signup", {
         username,
         email,
         password,

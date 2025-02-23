@@ -32,9 +32,9 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       if (!cachedUserId) {
         cachedUserId = "defaultUserId"; // Fallback user ID
       }
-      cachedUserId = "67ba3c2b75674ffe512e9bed";
+      cachedUserId = "67baaf848f023df4a21f230f";
     }
-    cachedUserId = "67ba3c2b75674ffe512e9bed";
+    cachedUserId = "67baaf848f023df4a21f230f";
 
     if (location) {
       const currentBuilding = findBuildingByCoordinate(
