@@ -1,7 +1,6 @@
 require('dotenv').config();
 
-const cron = require("node-cron");
-const UserModel = require("./models/User");
+//weekly monthly 
 
 const UserModel = require('./models/User');
 const SessionModel = require('./models/Session')
