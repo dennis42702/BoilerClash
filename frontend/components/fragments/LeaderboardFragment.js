@@ -23,6 +23,13 @@ const LeaderboardFragment = () => {
   const [viewType, setViewType] = useState("INDIVIDUAL");
   const [viewTypeMenuVisible, setViewTypeMenuVisible] = useState(false);
 
+  // Weekly / Monthly Toggle State
+  const [timeFrame, setTimeFrame] = useState("WEEKLY");
+
+  // Building Selection State
+  const [building, setBuilding] = useState("Select College");
+  const [buildingMenuVisible, setBuildingMenuVisible] = useState(false);
+
   // Sample Leaderboard Data
   const leaderboardData = [
     { rank: 1, username: "gustavo", major: "Computer Science", hr: 15628 },
@@ -42,6 +49,22 @@ const LeaderboardFragment = () => {
       hr: 6900,
     },
   ];
+
+  //BuildingOptions
+  const buildingOptions = [
+    "Library",
+    "Science Hall",
+    "Engineering Lab",
+    "Business Center",
+    "Dorm Study Room",
+  ];
+
+  // Filter leaderboard if a building is selected
+  const filteredLeaderboard =
+  building === "Select College"
+    ? leaderboardData
+    : leaderboardData.filter((item) => item.major === building);
+
 
   // Renders each leaderboard entry
   const renderItem = ({ item }) => {
@@ -75,9 +98,72 @@ const LeaderboardFragment = () => {
           </View>
         </Card>
         <View style={styles.separator} />
+      <PaperProvider>
+        <View style={styles.container}>
+          {/* Dropdown Menus */}
+          <View style={styles.dropdownContainer}>
+            {/* Category Toggle (TOTAL, BUILDING, TEAM, RAID) */}
+            <ToggleButtonCategories onPress={(category) => setCategory(category)} />
+  
+            {/* Weekly/Monthly Toggle */}
+            <SegmentedButtons
+              value={timeFrame}
+              onValueChange={setTimeFrame}
+              buttons={[
+                { value: "WEEKLY", label: "Weekly" },
+                { value: "MONTHLY", label: "Monthly" },
+              ]}
+            />
+  
+            {/* View Type Toggle (TEAM, INDIVIDUAL) */}
+            <ToggleButtonGroup onPress={(viewType) => setViewType(viewType)} />
+          </View>
+  
+          {/* Building Selection Dropdown */}
+          <View style={styles.buildingDropdown}>
+            <Menu
+              visible={buildingMenuVisible}
+              onDismiss={() => setBuildingMenuVisible(false)}
+              anchor={
+                <Button mode="outlined" onPress={() => setBuildingMenuVisible(true)}>
+                  {building}
+                </Button>
+              }
+            >
+              <Menu.Item
+                onPress={() => {
+                  setBuilding("Select College");
+                  setBuildingMenuVisible(false);
+                }}
+                title="All Colleges"
+              />
+              {buildingOptions.map((option, index) => (
+                <Menu.Item
+                  key={index}
+                  onPress={() => {
+                    setBuilding(option);
+                    setBuildingMenuVisible(false);
+                  }}
+                  title={option}
+                />
+              ))}
+            </Menu>
+          </View>
+  
+          {/* Leaderboard List */}
+          <FlatList
+            data={filteredLeaderboard}
+            keyExtractor={(item) => item.rank.toString()}
+            renderItem={renderItem}
+          />
+        </View>
+      </PaperProvider>
       </>
     );
+
   };
+
+
 
   const styles = StyleSheet.create({
     container: {
