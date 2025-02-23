@@ -20,6 +20,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    const userId = "1";
+    navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
+
+    return;
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
       return;
