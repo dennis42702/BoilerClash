@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, Image } from "react-native";
 import MapView, { Marker, Polygon } from "react-native-maps";
 import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import buildingsData from "../buildings.json";
 
 const MapFragment = () => {
   const mapRef = useRef(null);
@@ -48,39 +49,6 @@ const MapFragment = () => {
           visibility: "on",
         },
       ],
-    },
-  ];
-
-  const buildingPolygons = [
-    {
-      id: "WALC",
-      coordinates: [
-        { latitude: 40.427869, longitude: -86.913537 },
-        { latitude: 40.427869, longitude: -86.912798 },
-        { latitude: 40.426816, longitude: -86.912798 },
-        { latitude: 40.426816, longitude: -86.913537 },
-      ],
-      crowdedness: 0.88,
-    },
-    {
-      id: "STEW",
-      coordinates: [
-        { latitude: 40.425438, longitude: -86.913447 },
-        { latitude: 40.425438, longitude: -86.911969 },
-        { latitude: 40.424672, longitude: -86.911969 },
-        { latitude: 40.424672, longitude: -86.913447 },
-      ],
-      crowdedness: 0.4,
-    },
-    {
-      id: "KRAN",
-      coordinates: [
-        { latitude: 40.42385, longitude: -86.911272 },
-        { latitude: 40.42385, longitude: -86.910506 },
-        { latitude: 40.4235, longitude: -86.910506 },
-        { latitude: 40.4235, longitude: -86.911272 },
-      ],
-      crowdedness: 0.2,
     },
   ];
 
@@ -146,7 +114,7 @@ const MapFragment = () => {
         onPress={handleMapPress}
         customMapStyle={customMapStyle}
       >
-        {buildingPolygons.map((building) => (
+        {buildingsData.map((building) => (
           <React.Fragment key={building.id}>
             <Polygon
               key={building.id}

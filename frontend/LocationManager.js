@@ -1,8 +1,10 @@
 // LocationTask.js
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LOCATION_TASK_NAME = "background-location-task";
+let cachedUserId = null;
 
 // Define the background task
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
@@ -14,6 +16,11 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     const { locations } = data;
     const location = locations[0];
 
+    if (!cachedUserId) {
+      console.log("User ID not found. Cannot log location.");
+      return;
+    }
+
     if (location) {
       console.log("Background Location:", location);
     }
@@ -22,6 +29,11 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
 // Function to start background location tracking
 export const startLocationTracking = async () => {
+  cachedUserId = await AsyncStorage.getItem("userId");
+  if (!cachedUserId) {
+    cachedUserId = "defaultUserId"; // Fallback user ID
+  }
+
   const { status } = await Location.requestForegroundPermissionsAsync();
   const bgStatus = await Location.requestBackgroundPermissionsAsync();
 
