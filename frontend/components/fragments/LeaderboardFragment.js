@@ -102,7 +102,7 @@ const LeaderboardFragment = ({
           </View>
         </Card>
         <View style={styles.separator} />
-      </>
+        </>
     );
   };
 

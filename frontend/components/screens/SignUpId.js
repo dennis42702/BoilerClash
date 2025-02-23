@@ -138,6 +138,7 @@ const SignUpId = () => {
           loading={loading}
           disabled={loading}
           style={styles.nextButton}
+          textColor={colors.text}
         >
           {loading ? "Signing Up..." : "Sign Up"}
         </Button>
