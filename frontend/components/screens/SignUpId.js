@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
-import { TextInput, Button, Text, PaperProvider, useTheme } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  Text,
+  PaperProvider,
+  useTheme,
+} from "react-native-paper";
 import axios from "axios";
 
 const SignUpId = () => {
@@ -13,6 +19,8 @@ const SignUpId = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   // Regular Expressions for Validation
   const usernameRegex = /^[a-zA-Z0-9]{2,10}$/; // 2-10 letters or numbers
@@ -149,9 +157,15 @@ const SignUpId = () => {
           value={password}
           onChangeText={setPassword}
           mode="outlined"
-          secureTextEntry
+          secureTextEntry={!showPassword1}
           style={styles.input}
           activeOutlineColor={colors.primary}
+          right={
+            <TextInput.Icon
+              icon={showPassword1 ? "eye-off" : "eye"}
+              onPress={() => setShowPassword1(!showPassword1)}
+            />
+          }
         />
 
         <TextInput
@@ -159,9 +173,15 @@ const SignUpId = () => {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           mode="outlined"
-          secureTextEntry
+          secureTextEntry={!showPassword2}
           style={styles.input}
           activeOutlineColor={colors.primary}
+          right={
+            <TextInput.Icon
+              icon={showPassword2 ? "eye-off" : "eye"}
+              onPress={() => setShowPassword2(!showPassword2)}
+            />
+          }
         />
 
         {/* Sign Up Button */}

@@ -157,6 +157,10 @@ const ProfileFragment = ({ userId }) => {
             </Text>
             <Text style={styles.classMajor}>{userData.year}</Text>
             <Text style={styles.classMajor}>{userData.college}</Text>
+            <Text style={{ fontWeight: "bold" }}>
+              You ranked {userData.weeklyRank} out of {userData.totalUsers} this
+              week!
+            </Text>
           </View>
         </View>
 

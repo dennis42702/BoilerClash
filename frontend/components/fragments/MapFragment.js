@@ -208,7 +208,7 @@ const MapFragment = () => {
               coordinate={calculatePolygonCenter(building.coordinates)}
               icon={
                 viewType == "CROWDEDNESS"
-                  ? require("../../assets/marker.png")
+                  ? require("../../assets/castle.png")
                   : iconImages[collegeToIcon(building.conquered)]
               }
               onPress={() => showDialog(building)}

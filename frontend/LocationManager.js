@@ -27,14 +27,14 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     const { locations } = data;
     const location = locations[0];
 
-    if (cachedUserId === "defaultUserId") {
-      cachedUserId = await AsyncStorage.getItem("userId");
-      if (!cachedUserId) {
-        cachedUserId = "defaultUserId"; // Fallback user ID
-      }
-      cachedUserId = "67ba3c2b75674ffe512e9bed";
-    }
-    cachedUserId = "67ba3c2b75674ffe512e9bed";
+    // if (cachedUserId === "defaultUserId") {
+    //   cachedUserId = await AsyncStorage.getItem("userId");
+    //   if (!cachedUserId) {
+    //     cachedUserId = "defaultUserId"; // Fallback user ID
+    //   }
+    //   cachedUserId = "67ba3c2b75674ffe512e9bed";
+    // }
+    // cachedUserId = "67ba3c2b75674ffe512e9bed";
 
     if (location) {
       const currentBuilding = findBuildingByCoordinate(
@@ -113,11 +113,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 });
 
 // Function to start background location tracking
-export const startLocationTracking = async () => {
-  cachedUserId = await AsyncStorage.getItem("userId");
-  if (!cachedUserId) {
-    cachedUserId = "defaultUserId"; // Fallback user ID
-  }
+export const startLocationTracking = async (userId) => {
+  cachedUserId = userId;
 
   const { status } = await Location.requestForegroundPermissionsAsync();
   const bgStatus = await Location.requestBackgroundPermissionsAsync();

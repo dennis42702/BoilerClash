@@ -16,6 +16,11 @@ import MapFragment from "./fragments/MapFragment";
 import ProfileFragment from "./fragments/ProfileFragment";
 import axios from "axios";
 
+import {
+  startLocationTracking,
+  stopLocationTracking,
+} from "../LocationManager";
+
 const MapRoute = () => <MapFragment />;
 
 const ProfileRoute = () => <ProfileFragment />;
@@ -111,6 +116,10 @@ const HomeScreen = () => {
     fetchWeeklyIndividualLeaderboard();
     fetchMonthlyIndividualLeaderboard();
 
+    if (userId) {
+      startLocationTracking(userId);
+    }
+
     const backAction = () => {
       showDialog();
       return true;
@@ -120,7 +129,10 @@ const HomeScreen = () => {
       "hardwareBackPress",
       backAction
     );
-    return () => backHandler.remove();
+    return () => {
+      stopLocationTracking();
+      backHandler.remove();
+    };
   }, []);
 
   // Exit the app

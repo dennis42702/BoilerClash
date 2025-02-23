@@ -11,11 +11,13 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "This app needs access to your location.",
-        "NSLocationAlwaysUsageDescription": "This app needs access to your location even when running in the background.",
         "NSLocationWhenInUseUsageDescription": "This app needs your location to provide better services.",
+        "NSLocationAlwaysUsageDescription": "This app needs access to your location even when running in the background.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs your location to provide better services.",
-        "UIBackgroundModes": ["location", "fetch"]
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
       }
     },
     "android": {
@@ -24,11 +26,15 @@
           "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
         }
       },
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.paaaark.BoilerClash"
     },
     "web": {
       "bundler": "metro",
@@ -49,6 +55,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4b3cbb24-b014-4265-b8a9-6ecdd7db5cb9"
+      }
     }
   }
 }
