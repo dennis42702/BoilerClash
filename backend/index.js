@@ -4,7 +4,7 @@ const UserModel = require('./models/User');
 const SessionModel = require('./models/Session')
 const BuildingModel = require('./models/Building')
 const IndividualMonthlyLeaderboardModel = require('./models/IndividualMonthlyLeaderboard')
-const IndividualMonthlyLeaderboardModel = require('./models/IndividualWeeklyLeaderboard')
+const IndividualWeeklyLeaderboardModel = require('./models/IndividualWeeklyLeaderboard')
 const CollegeLeaderboardModel = require('./models/CollegeLeaderboard')
 const BuildingLeaderboardModel = require('./models/BuildingLeaderboard')
 
