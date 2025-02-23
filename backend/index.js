@@ -153,40 +153,71 @@ mongoose.connect(process.env.MONGO_URI)
   
   app.post("/newSession", async (req, res) => {
     try {
-      const { userId, buildingName } = req.body;
-  
-      if (!userId || !buildingName) {
+      const { userId, buildingName, startTime, endTime, duration } = req.body;
+      
+      if (!userId || !buildingName || !startTime || !endTime || !duration) {
         return res.status(400).json({ success: false, message: "Missing required fields" });
       }
+
+      const building = await BuildingModel.findOne({ buildingName });
+
+      if (!building) {
+        return res.status(404).json({ success: false, message: "Building not found" });
+      }
+
+      const buildingId = building._id;
   
-      const newItem = await Session.create({ field1, field2 });
+      const newSession = await SessionModel.create({ buildingId, userId, startTime, endTime, duration });
   
-      res.status(201).json({ success: true, message: "Item created", data: newItem });
+      res.status(201).json({ success: true, message: "Item created", sessionId: newSession._id, data: newSession }); //send sessionId;
   
     } catch (error) {
-      console.error("Error in /whatever:", error);
+      console.error("Error in newSession:", error);
       res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
   });
 
   app.post("/updateSession", async (req, res) => {
     try {
-      const { field1, field2 } = req.body;
-  
-      if (!field1 || !field2) {
+      const { sessionId, endTime } = req.body;
+
+      
+      if (!sessionId || !endTime) {
         return res.status(400).json({ success: false, message: "Missing required fields" });
       }
-  
-      const newItem = await SomeModel.create({ field1, field2 });
-  
-      res.status(201).json({ success: true, message: "Item created", data: newItem });
+
+
+
+      const session = await SessionModel.findById(sessionId);
+
+      if (!session) {
+        return res.status(404).json({ success: false, message: "Session not found" });
+      }
+
+      const startTime = session.startTime;
+      const duration = (endTime - startTime) / (1000 * 60 * 60);
+
+      if (duration < 0) {
+        return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
+      }
+
+      session.endTime = endTime;
+      session.duration = duration;
+      await session.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Session updated successfully",
+        updatedSession: session,
+        addedHours: duration
+      });
+
   
     } catch (error) {
-      console.error("Error in /whatever:", error);
+      console.error("Error in updateSession:", error);
       res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
   });
-
 
 
 
