@@ -1,6 +1,6 @@
 [
   {
-    "id": "WALC",
+    "id": "STEW",
     "coordinates": [
       { "latitude": 40.427869, "longitude": -86.913537 },
       { "latitude": 40.427869, "longitude": -86.912798 },
@@ -8,7 +8,8 @@
       { "latitude": 40.426816, "longitude": -86.913537 }
     ],
     "crowdedness": 0.88,
-    "conquered": "Daniels School of Business"
+    "conquered": "Daniels School of Business",
+    "image": "https://lh5.googleusercontent.com/p/AF1QipOYgVfG6wAEZtfAE1l1a7arX9WGRH1VSPffYviF=w426-h240-k-no"
   },
   {
     "id": "STEW",
@@ -19,7 +20,8 @@
       { "latitude": 40.424672, "longitude": -86.913447 }
     ],
     "crowdedness": 0.4,
-    "conquered": "College of Pharmacy"
+    "conquered": "College of Pharmacy",
+    "image": "https://www.purdueforlife.org/app/uploads/Admissions-Reception-Desk.png"
   },
   {
     "id": "KRAN",
@@ -30,9 +32,9 @@
       { "latitude": 40.4235, "longitude": -86.911272 }
     ],
     "crowdedness": 0.2,
-    "conquered": "College of Science"
+    "conquered": "College of Science",
+    "image": "https://032314424b.cbaul-cdnwnd.com/a475f2b7d303a4959f116aa9a1c9c5b1/200000002-9400f94010/contact-us.jpg?ph=032314424b"
   },
-
   {
     "id": "PMU",
     "coordinates": [
@@ -42,7 +44,8 @@
       { "latitude": 40.425461, "longitude": -86.911724 }
     ],
     "crowdedness": 0.4,
-    "conquered": "Purdue Polytechnic"
+    "conquered": "Purdue Polytechnic",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFISM_CpygBAUR-WepzFNw-735K_tjuYu98g&s"
   },
   {
     "id": "RAWL",
@@ -53,7 +56,8 @@
       { "latitude": 40.42388, "longitude": -86.910215 }
     ],
     "crowdedness": 0.2,
-    "conquered": "College of Engineering"
+    "conquered": "College of Engineering",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtgxSG_I6vqC6Aid1Bk3G88FYL-214PXtFSw&s"
   },
   {
     "id": "LWSN",
@@ -64,7 +68,8 @@
       { "latitude": 40.428163, "longitude": -86.917193 }
     ],
     "crowdedness": 0.1,
-    "conquered": "College of Engineering"
+    "conquered": "College of Engineering",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjVd0K8JfZHQpJih_iyx2bujwUTy8M6WJf3Q&s"
   },
   {
     "id": "CREC",
@@ -75,7 +80,8 @@
       { "latitude": 40.4293, "longitude": -86.923 }
     ],
     "crowdedness": 0.2,
-    "conquered": "College of Liberal Arts"
+    "conquered": "College of Liberal Arts",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMBpKWG_v88m9-JOmb6vHBQbxuRis_sJP2Og&s"
   },
   {
     "id": "KRCH",
@@ -86,6 +92,103 @@
       { "latitude": 40.427773, "longitude": -86.921602 }
     ],
     "crowdedness": 0.2,
-    "conquered": "Exploratory Studies"
+    "conquered": "Exploratory Studies",
+    "image": "https://www.sasaki.com/wp-content/uploads/2019/10/01-Krach_CornerView_2014_8789-1800x1200.jpg"
+  },
+  {
+    "id": "BHEE",
+    "coordinates": [
+      { "latitude": 40.428804, "longitude": -86.912605 },
+      { "latitude": 40.429173, "longitude": -86.911919 },
+      { "latitude": 40.428474, "longitude": -86.911152 },
+      { "latitude": 40.428076, "longitude": -86.911754 }
+    ],
+    "crowdedness": 0.2,
+    "conquered": "College of Engineering",
+    "image": "https://engineering.purdue.edu/ECE/Giving/BHEE/Spaces/graduate-wing/explorationgraduatewing-web.jpg"
+  },
+  {
+    "id": "DUDL",
+    "coordinates": [
+      { "latitude": 40.428017, "longitude": -86.911917 },
+      { "latitude": 40.428017, "longitude": -86.91078 },
+      { "latitude": 40.42697, "longitude": -86.91078 },
+      { "latitude": 40.42697, "longitude": -86.911917 }
+    ],
+    "crowdedness": 0.7,
+    "conquered": "Purdue Polytechnic",
+    "image": "https://polytechnic.purdue.edu/sites/default/files/Gateway-dedication-hero-featured.jpg"
+  },
+  {
+    "id": "GRIS",
+    "coordinates": [
+      { "latitude": 40.426797, "longitude": -86.911143 },
+      { "latitude": 40.426797, "longitude": -86.910581 },
+      { "latitude": 40.426141, "longitude": -86.910581 },
+      { "latitude": 40.426797, "longitude": -86.911143 }
+    ],
+    "crowdedness": 0.15,
+    "conquered": "College of Science",
+    "image": "https://engineering.purdue.edu/IE/aboutus/aboutus/facilities/images/ext-gris-fall"
+  },
+  {
+    "id": "WTHR",
+    "coordinates": [
+      { "latitude": 40.426744, "longitude": -86.913568 },
+      { "latitude": 40.426744, "longitude": -86.912587 },
+      { "latitude": 40.426159, "longitude": -86.912587 },
+      { "latitude": 40.426159, "longitude": -86.913568 }
+    ],
+    "crowdedness": 0.4,
+    "conquered": "College of Science",
+    "image": "https://live.staticflickr.com/2768/4427166189_2d5ba41c53_c.jpg"
+  },
+  {
+    "id": "BRWN",
+    "coordinates": [
+      { "latitude": 40.426771, "longitude": -86.912427 },
+      { "latitude": 40.426771, "longitude": -86.911242 },
+      { "latitude": 40.426392, "longitude": -86.911242 },
+      { "latitude": 40.426392, "longitude": -86.912427 }
+    ],
+    "crowdedness": 0.3,
+    "conquered": "College of Science",
+    "image": "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=-8G3b-8Q3gB4kuwy5oIKDA&cb_client=search.gws-prod.gps&w=408&h=240&yaw=172.70203&pitch=0&thumbfov=100"
+  },
+  {
+    "id": "UNIV",
+    "coordinates": [
+      { "latitude": 40.425471, "longitude": -86.91534 },
+      { "latitude": 40.425471, "longitude": -86.914953 },
+      { "latitude": 40.425046, "longitude": -86.914953 },
+      { "latitude": 40.425046, "longitude": -86.91534 }
+    ],
+    "crowdedness": 0.2,
+    "conquered": "College of Liberal Arts",
+    "image": "https://www.purdueforlife.org/app/uploads/Uni-Hall-Student-gathering-area-9-2023-1024x576.jpg"
+  },
+  {
+    "id": "ME",
+    "coordinates": [
+      { "latitude": 40.428139, "longitude": -86.913594 },
+      { "latitude": 40.428733, "longitude": -86.912647 },
+      { "latitude": 40.428232, "longitude": -86.912121 },
+      { "latitude": 40.427862, "longitude": -86.912875 }
+    ],
+    "crowdedness": 0.6,
+    "conquered": "Purdue Polytechnic",
+    "image": "https://engineering.purdue.edu/MECL/assets/building-short.jpg"
+  },
+  {
+    "id": "SC",
+    "coordinates": [
+      { "latitude": 40.426794, "longitude": -86.914676 },
+      { "latitude": 40.426794, "longitude": -86.913937 },
+      { "latitude": 40.426239, "longitude": -86.913937 },
+      { "latitude": 40.426239, "longitude": -86.914676 }
+    ],
+    "crowdedness": 0.8,
+    "conquered": "College of Liberal Arts",
+    "image": "https://live.staticflickr.com/3687/19049161634_34e1eb3791_b.jpg"
   }
 ]

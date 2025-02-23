@@ -6,9 +6,9 @@ import { findBuildingByCoordinate } from "./util/util";
 import axios from "axios";
 import { endAsyncEvent } from "react-native/Libraries/Performance/Systrace";
 
-const updateInterval = 2000; // 1 second
-const SESSION_MINIMUM_THRESHOLD = 3000; // 3 seconds
-const INBETWEEN_SESSION_THRESHOLD = 3000; // 3 seconds
+const updateInterval = 5000; // 1 second
+const SESSION_MINIMUM_THRESHOLD = 5000; // 3 seconds
+const INBETWEEN_SESSION_THRESHOLD = 5000; // 3 seconds
 
 const LOCATION_TASK_NAME = "background-location-task";
 let cachedUserId = null;
@@ -32,9 +32,9 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       if (!cachedUserId) {
         cachedUserId = "defaultUserId"; // Fallback user ID
       }
-      cachedUserId = "67baaf848f023df4a21f230f";
+      cachedUserId = "67ba3c2b75674ffe512e9bed";
     }
-    cachedUserId = "67baaf848f023df4a21f230f";
+    cachedUserId = "67ba3c2b75674ffe512e9bed";
 
     if (location) {
       const currentBuilding = findBuildingByCoordinate(

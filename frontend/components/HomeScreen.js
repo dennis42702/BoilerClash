@@ -8,8 +8,6 @@ import MapFragment from "./fragments/MapFragment";
 import ProfileFragment from "./fragments/ProfileFragment";
 import axios from "axios";
 
-const LeaderboardRoute = () => <LeaderboardFragment />;
-
 const MapRoute = () => <MapFragment />;
 
 const ProfileRoute = () => <ProfileFragment />;
@@ -42,7 +40,12 @@ const HomeScreen = () => {
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    leaderboard: LeaderboardRoute,
+    leaderboard: () => (
+      <LeaderboardFragment
+        weeklyIndividualLeaderboard={weeklyIndividualLeaderboard}
+        monthlyIndividualLeaderboard={monthlyIndividualLeaderboard}
+      />
+    ),
     map: MapRoute,
     profile: ProfileRoute,
   });
@@ -89,8 +92,8 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    // fetchWeeklyIndividualLeaderboard();
-    // fetchMonthlyIndividualLeaderboard();
+    fetchWeeklyIndividualLeaderboard();
+    fetchMonthlyIndividualLeaderboard();
   }, []);
 
   return (

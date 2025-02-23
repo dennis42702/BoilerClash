@@ -15,10 +15,38 @@ import ToggleButtonGroup from "../subcomponents/ToggleButtonGroup";
 import ToggleButtonCategories from "../subcomponents/ToggleButtonCategories";
 import ToggleButtonInterval from "../subcomponents/ToggleButtonInterval";
 
+const leaderboardData = {
+  leaderboard: [
+    { rank: 1, username: "gustavo", major: "Computer Science", hr: 15628 },
+    { rank: 2, username: "tianyi", major: "Industrial Engineering", hr: 12876 },
+    { rank: 3, username: "jacob", major: "Business", hr: 10887 },
+    { rank: 4, username: "karius", major: "Computer Science", hr: 9827 },
+    { rank: 5, username: "segyul", major: "Industrial Engineering", hr: 9655 },
+    { rank: 6, username: "dennis", major: "Business", hr: 8876 },
+    { rank: 7, username: "june", major: "Computer Science", hr: 8450 },
+    { rank: 8, username: "joshua", major: "Industrial Engineering", hr: 8000 },
+    { rank: 9, username: "brian", major: "Business", hr: 7500 },
+    { rank: 10, username: "popping", major: "Computer Science", hr: 7200 },
+    {
+      rank: 11,
+      username: "kendrick",
+      major: "Industrial Engineering",
+      hr: 6900,
+    },
+  ],
+};
+
 const LeaderboardFragment = ({
   weeklyIndividualLeaderboard,
   monthlyIndividualLeaderboard,
 }) => {
+  if (!weeklyIndividualLeaderboard) {
+    weeklyIndividualLeaderboard = leaderboardData;
+  }
+  if (!monthlyIndividualLeaderboard) {
+    monthlyIndividualLeaderboard = leaderboardData;
+  }
+
   const { colors } = useTheme();
 
   // Dropdown State
@@ -36,39 +64,16 @@ const LeaderboardFragment = ({
   const [buildingMenuVisible, setBuildingMenuVisible] = useState(false);
 
   // Sample Leaderboard Data
-  const leaderboardData = [
-    { rank: 1, username: "gustavo", major: "Computer Science", hr: 15628 },
-    { rank: 2, username: "tianyi", major: "Industrial Engineering", hr: 12876 },
-    { rank: 3, username: "jacob", major: "Business", hr: 10887 },
-    { rank: 4, username: "karius", major: "Computer Science", hr: 9827 },
-    { rank: 5, username: "segyul", major: "Industrial Engineering", hr: 9655 },
-    { rank: 6, username: "dennis", major: "Business", hr: 8876 },
-    { rank: 7, username: "june", major: "Computer Science", hr: 8450 },
-    { rank: 8, username: "joshua", major: "Industrial Engineering", hr: 8000 },
-    { rank: 9, username: "brian", major: "Business", hr: 7500 },
-    { rank: 10, username: "popping", major: "Computer Science", hr: 7200 },
-    {
-      rank: 11,
-      username: "kendrick",
-      major: "Industrial Engineering",
-      hr: 6900,
-    },
-  ];
 
-  //BuildingOptions
-  const buildingOptions = [
-    "Library",
-    "Science Hall",
-    "Engineering Lab",
-    "Business Center",
-    "Dorm Study Room",
-  ];
-
-  // Filter leaderboard if a building is selected
-  const filteredLeaderboard =
-    building === "Select College"
-      ? leaderboardData
-      : leaderboardData.filter((item) => item.major === building);
+  const selectData = () => {
+    if (viewType === "INDIVIDUAL") {
+      return timeFrame === "WEEKLY"
+        ? weeklyIndividualLeaderboard.leaderboard
+        : monthlyIndividualLeaderboard.leaderboard;
+    } else {
+      return weeklyIndividualLeaderboard.leaderboard; // Placeholder for team leaderboard
+    }
+  };
 
   // Renders each leaderboard entry
   const renderItem = ({ item }) => {
@@ -96,9 +101,11 @@ const LeaderboardFragment = ({
               {viewType === "INDIVIDUAL" && (
                 <Text style={styles.username}>{item.username}</Text>
               )}
-              <Text style={styles.major}>{item.major}</Text>
+              <Text style={styles.major}>{item.college}</Text>
             </View>
-            <Text style={styles.hr}>{item.hr}</Text>
+            <Text style={styles.hr}>
+              {Math.round(item.weeklyStudyHours * 60)}
+            </Text>
           </View>
         </Card>
         <View style={styles.separator} />
@@ -191,7 +198,7 @@ const LeaderboardFragment = ({
 
       {/* Leaderboard List */}
       <FlatList
-        data={leaderboardData}
+        data={selectData()}
         keyExtractor={(item) => item.rank.toString()}
         renderItem={renderItem}
       />

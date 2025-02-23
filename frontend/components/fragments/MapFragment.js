@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import MapView, { Callout, Marker, Polygon, Heatmap } from "react-native-maps";
-import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
+import { FAB, Button, Paragraph, Dialog, Portal } from "react-native-paper";
 import buildingsData from "../buildings.json";
 import { collegeToIcon } from "../../util/util";
 import MapToggleButton from "../subcomponents/MapToggleButton";
@@ -11,6 +11,8 @@ const MapFragment = () => {
   const mapRef = useRef(null);
   const [viewType, setViewType] = useState("CROWDEDNESS");
   const [radius, setRadius] = useState(20);
+  const [visible, setVisible] = useState(false);
+  const [selectedBuilding, setSelectedBuilding] = useState(null);
 
   const handleRegionChange = (region) => {
     const { latitudeDelta } = region;
@@ -136,6 +138,16 @@ const MapFragment = () => {
     return { latitude, longitude };
   };
 
+  const showDialog = (building) => {
+    setSelectedBuilding(building);
+    setVisible(true);
+  };
+
+  const hideDialog = () => {
+    setVisible(false);
+    setSelectedBuilding(null);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -191,14 +203,15 @@ const MapFragment = () => {
               strokeWidth={0}
             />
             <Marker
-              title={building.id}
-              description="Long ass description.Hosung is a fucking motherfucker and doesn't know shit about coding"
+              // title={building.id}
+              // description="Long ass description.Hosung is a fucking motherfucker and doesn't know shit about coding"
               coordinate={calculatePolygonCenter(building.coordinates)}
               icon={
                 viewType == "CROWDEDNESS"
                   ? require("../../assets/marker.png")
                   : iconImages[collegeToIcon(building.conquered)]
               }
+              onPress={() => showDialog(building)}
               // icon={iconImages[collegeToIcon(building.conquered)]}
             >
               {/* <Callout>
@@ -220,6 +233,32 @@ const MapFragment = () => {
           </React.Fragment>
         ))}
       </MapView>
+
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title style={{ textAlign: "center" }}>
+            {selectedBuilding?.id ?? "Building Details"}
+          </Dialog.Title>
+          <Dialog.Content>
+            {selectedBuilding?.image && (
+              <Image
+                source={{ uri: selectedBuilding.image }}
+                style={styles.dialogImage}
+              />
+            )}
+            <Paragraph>
+              Crowdedness: {(selectedBuilding?.crowdedness * 100).toFixed(0)}%
+            </Paragraph>
+            <Paragraph>
+              Conquered by: {selectedBuilding?.conquered ?? "N/A"}
+            </Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Close</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
       <View style={styles.toggleButtonContainer}>
         <MapToggleButton onPress={(viewType) => setViewType(viewType)} />
       </View>
@@ -234,6 +273,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#ccc",
     borderWidth: 1,
+  },
+  dialogImage: {
+    width: "100%",
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   toggleButtonContainer: {
     position: "absolute",
