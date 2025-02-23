@@ -87,28 +87,5 @@
     ],
     "crowdedness": 0.2,
     "conquered": "Exploratory Studies"
-  },
-  {
-    "id": "HOVD",
-    "coordinates": [
-      {
-        "latitude": 40.422198,
-        "longitude": -86.91105400000001
-      },
-      {
-        "latitude": 40.422198,
-        "longitude": -86.910134
-      },
-      {
-        "latitude": 40.421814000000005,
-        "longitude": -86.910134
-      },
-      {
-        "latitude": 40.421814000000005,
-        "longitude": -86.91105400000001
-      }
-    ],
-    "crowdedness": 0.76,
-    "conquered": "College of Liberal Arts"
   }
 ]

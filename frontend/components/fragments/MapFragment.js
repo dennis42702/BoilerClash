@@ -2,10 +2,8 @@ import React, { useState, useRef } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import MapView, { Callout, Marker, Polygon, Heatmap } from "react-native-maps";
 import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import buildingsData from "../buildings.json";
 import { collegeToIcon } from "../../util/util";
-import { requestFormReset } from "react-dom";
 import MapToggleButton from "../subcomponents/MapToggleButton";
 import sampleData from "../sample_people_at_purdue.json";
 
