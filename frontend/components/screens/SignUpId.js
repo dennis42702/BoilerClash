@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Alert } from "react-native";
-import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
+import { TextInput, Button, Text, PaperProvider, useTheme } from "react-native-paper";
 import axios from "axios";
 
 const SignUpId = () => {
   const navigation = useNavigation();
+  const { colors } = useTheme();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -96,6 +97,7 @@ const SignUpId = () => {
           onChangeText={setUsername}
           mode="outlined"
           style={styles.input}
+          activeOutlineColor={colors.primary}
         />
 
         <TextInput
@@ -106,6 +108,7 @@ const SignUpId = () => {
           keyboardType="email-address"
           autoCapitalize="none"
           style={styles.input}
+          activateOutlineColor={colors.primary}
         />
 
         <TextInput
@@ -115,6 +118,7 @@ const SignUpId = () => {
           mode="outlined"
           secureTextEntry
           style={styles.input}
+          activeOutlineColor={colors.primary}
         />
 
         <TextInput
@@ -124,6 +128,7 @@ const SignUpId = () => {
           mode="outlined"
           secureTextEntry
           style={styles.input}
+          activeOutlineColor={colors.primary}
         />
 
         {/* Sign Up Button */}
@@ -157,10 +162,12 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     marginBottom: 10,
+    backgroundColor: "white",
   },
   nextButton: {
     marginTop: 10,
     width: "100%",
+    backgroundColor: "blue",
   },
 });
 
