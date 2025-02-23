@@ -84,37 +84,43 @@ const LeaderboardFragment = ({
   useEffect(() => {
     const updateData = async () => {
       let monthlyResponse;
+      let monthlyLeaderboard;
       if (viewType === "INDIVIDUAL") {
         monthlyResponse = await axios.post(
           "http://10.186.187.54:5003/buildingLeaderboard/individual/monthly",
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
+        console.log("RESPONSE4", monthlyResponse.data);
+        monthlyLeaderboard = monthlyResponse.data.leaderboardByBuilding;
       } else {
         monthlyResponse = await axios.post(
           "http://10.186.187.54:5003/buildingLeaderboard/college/monthly",
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
+        console.log("RESPONSE3", monthlyResponse.data);
+        monthlyLeaderboard = monthlyResponse.data.leaderboardByCollege;
       }
       let weeklyResponse;
+      let weeklyLeaderboard;
       if (viewType === "INDIVIDUAL") {
         weeklyResponse = await axios.post(
           "http://10.186.187.54:5003/buildingLeaderboard/individual/weekly",
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
+        console.log("RESPONSE2", weeklyResponse.data);
+        weeklyLeaderboard = weeklyResponse.data.leaderboardByBuilding;
       } else {
         weeklyResponse = await axios.post(
           "http://10.186.187.54:5003/buildingLeaderboard/college/weekly",
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
+        console.log("RESPONSE1", weeklyResponse.data);
+        weeklyLeaderboard = weeklyResponse.data.leaderboardByCollege;
       }
-
-      const monthlyLeaderboard =
-        monthlyResponse.data.leaderboardByBuilding || [];
-      const weeklyLeaderboard = weeklyResponse.data.leaderboardByBuilding || [];
 
       console.log("Fetched Weekly Data:", weeklyLeaderboard);
       console.log("Fetched Monthly Data:", monthlyLeaderboard);

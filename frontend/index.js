@@ -31,10 +31,10 @@ const App = () => {
     };
     checkLoginStatus();
 
-    startLocationTracking();
-    return () => {
-      stopLocationTracking();
-    };
+    // startLocationTracking();
+    // return () => {
+    //   stopLocationTracking();
+    // };
   }, []);
 
   return (

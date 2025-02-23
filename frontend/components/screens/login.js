@@ -6,6 +6,7 @@ import {
   Text,
   PaperProvider,
   useTheme,
+  IconButton,
 } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -19,6 +20,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     // console.log("Login button pressed");
@@ -129,9 +131,15 @@ const Login = () => {
           value={password}
           onChangeText={setPassword}
           mode="outlined"
-          secureTextEntry
+          secureTextEntry={!showPassword}
           style={styles.input}
           activeOutlineColor={colors.primary}
+          right={
+            <TextInput.Icon
+              icon={showPassword ? "eye-off" : "eye"}
+              onPress={() => setShowPassword(!showPassword)}
+            />
+          }
         />
 
         {/* Forgot Password Button */}

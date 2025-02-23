@@ -1,50 +1,110 @@
-# Welcome to your Expo app 👋
+# Purdue Clash
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Description
 
-## Get started
+Purdue Clash is a React Native application designed to gamify and track study hours within Purdue University libraries. The app allows users to monitor their study time, compete on leaderboards, view library crowdedness on a map, and manage their profiles.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- **User Authentication:** Sign up, login, and password reset features.
+- **Study Time Tracking:** Automatically track study time when within a designated Purdue library.
+- **Leaderboard:** Compete with other students based on study hours (weekly and monthly rankings).
+- **Interactive Map:** View crowdedness and building information within the Purdue campus.
+- **Profile Management:** Users can view and update their profile, including study statistics and rankings.
+- **Building Conquest:** Colleges can "conquer" buildings by accumulating the most study hours within them, adding a competitive aspect to the app.
 
-2. Start the app
+## Installation
 
-   ```bash
-    npx expo start
-   ```
+### Prerequisites
 
-In the output, you'll find options to open the app in a
+- Node.js
+- npm or yarn
+- Expo CLI (`npm install -g expo-cli`)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Setup
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+```sh
+# Clone the repository
+git clone <repository_url>
+cd purdue-library-study-tracker
 
-## Get a fresh project
+# Install dependencies
+npm install
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+# Start the Expo server
+npm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Running the App
 
-## Learn more
+### Android
 
-To learn more about developing your project with Expo, look at the following resources:
+```sh
+npm run android
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### iOS
 
-## Join the community
+```sh
+npm run ios
+```
 
-Join our community of developers creating universal apps.
+### Web
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```sh
+npm run web
+```
+
+## Folder Structure
+
+```
+.
+├── components
+│   ├── HomeScreen.js
+│   ├── screens
+│   │   ├── Login.js
+│   │   ├── ForgotPW.js
+│   │   ├── SignUpId.js
+│   │   └── SignUpInfo.js
+│   ├── fragments
+│   │   ├── LeaderboardFragment.js
+│   │   ├── MapFragment.js
+│   │   └── ProfileFragment.js
+├── assets
+├── data
+├── LocationManager.js
+├── Theme.js
+└── index.js
+```
+
+## Key Dependencies
+
+- **React Native Paper:** UI components.
+- **React Navigation:** Navigation between screens.
+- **Axios:** API requests.
+- **React Native Maps:** Map and location services.
+
+## How Leaderboards and Building Conquests Work
+
+The app uses background location tracking to monitor users' study sessions in different buildings. The `LocationManager.js` file handles location tracking and communicates with the backend to log study sessions. Based on the accumulated study hours, individual users are ranked on the leaderboard, and colleges can "conquer" buildings by contributing the most study hours within them.
+
+## API Endpoints
+
+- **Login:** `POST /login`
+- **Signup:** `POST /signup`
+- **Reset Password:** `POST /reset-password`
+- **Individual Leaderboard:** `GET /individualLeaderboard/weekly`
+- **Building Data:** `POST /buildingLeaderboard/individual/weekly`
+- **Study Session Management:** `POST /newSession`, `POST /updateSession`
+
+## License
+
+This project is licensed under the MIT License.
+
+## Contributors
+
+- Segyul Park - [park1362@purdue.edu]
+- Junhee Lim - [lim347@purdue.edu]
+- Hosung Ryu - [ryu62@purdue.edu]
+
+Feel free to contribute to this project by submitting issues or pull requests.
