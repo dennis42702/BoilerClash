@@ -4,6 +4,7 @@ import MapView, { Marker, Polygon } from "react-native-maps";
 import { FAB, Button, Text, Card, PaperProvider } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import buildingsData from "../buildings.json";
+import { collegeToIcon } from "../../util/util";
 
 const MapFragment = () => {
   const mapRef = useRef(null);
@@ -53,15 +54,7 @@ const MapFragment = () => {
   ];
 
   const handleMapPress = (event) => {
-    const { coordinate } = event.nativeEvent;
-    setMarkers([
-      ...markers,
-      {
-        title: "New Marker",
-        description: "Added by tap",
-        coordinate,
-      },
-    ]);
+    return;
   };
 
   const getHeatmapColor = (score) => {
@@ -125,7 +118,7 @@ const MapFragment = () => {
             <Marker
               title={building.id}
               coordinate={calculatePolygonCenter(building.coordinates)}
-              icon={require("../../assets/castle.png")}
+              icon="castle"
             ></Marker>
           </React.Fragment>
         ))}

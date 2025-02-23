@@ -20,6 +20,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    await AsyncStorage.setItem("userId", email);
+
     navigation.navigate("HomeScreen");
     return;
     if (!email || !password) {

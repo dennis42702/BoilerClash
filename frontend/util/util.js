@@ -1,6 +1,6 @@
 import buildingData from "../components/buildings.json";
 
-const collegeToIconMap = new Map(
+const collegeToIconMap = new Map([
   ["College of Agriculture", "corn"],
   ["Daniels School of Business", "handshake"],
   ["College of Education", "book-education"],
@@ -11,8 +11,8 @@ const collegeToIconMap = new Map(
   ["College of Pharmacy", "pill"],
   ["Purdue Polytechnic", "monitor"],
   ["College of Science", "flask"],
-  ["College of Veterinary Medicine", "paw"]
-);
+  ["College of Veterinary Medicine", "paw"],
+]);
 
 export const collegeToIcon = (college) => {
   return collegeToIconMap.get(college) || "school";
@@ -38,7 +38,7 @@ const isPointInPolygon = (latitude, longitude, polygon) => {
 export const findBuildingByCoordinate = (latitude, longitude) => {
   for (const building of buildingData) {
     if (isPointInPolygon(latitude, longitude, building.coordinates)) {
-      return building.buliding_name;
+      return building.id;
     }
   }
   return "";
