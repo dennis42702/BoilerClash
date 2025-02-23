@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text, PaperProvider } from "react-native-paper";
 import axios from "axios";
+import { API_URL } from "../../CONST";
 
 const ForgotPW = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ const ForgotPW = ({ navigation }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://10.186.105.111:5003/reset-password", {
+      const response = await axios.post(`${API_URL}/reset-password`, {
         email,
         newPassword,
       });

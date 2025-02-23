@@ -15,6 +15,7 @@ import LeaderboardFragment from "./fragments/LeaderboardFragment";
 import MapFragment from "./fragments/MapFragment";
 import ProfileFragment from "./fragments/ProfileFragment";
 import axios from "axios";
+import { API_URL } from "../CONST";
 
 import {
   startLocationTracking,
@@ -91,7 +92,7 @@ const HomeScreen = () => {
   const fetchWeeklyIndividualLeaderboard = async () => {
     try {
       const response = await axios.get(
-        "http://10.186.187.54:5003/individualLeaderboard/weekly"
+        `${API_URL}/individualLeaderboard/weekly`
       );
       setWeeklyIndividualLeaderboard(response.data);
       console.log("Weekly Individual Leaderboard:", response.data);
@@ -103,7 +104,7 @@ const HomeScreen = () => {
   const fetchMonthlyIndividualLeaderboard = async () => {
     try {
       const response = await axios.get(
-        "http://10.186.187.54:5003/individualLeaderboard/monthly"
+        `${API_URL}/individualLeaderboard/monthly`
       );
       setMonthlyIndividualLeaderboard(response.data);
       console.log("Monthly Individual Leaderboard:", response.data);

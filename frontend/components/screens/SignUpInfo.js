@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { View, StyleSheet, Alert, ScrollView, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import {
   TextInput,
   Button,
@@ -10,6 +17,7 @@ import {
   Menu,
 } from "react-native-paper";
 import axios from "axios";
+import { API_URL } from "../../CONST";
 
 const SignUpInfo = () => {
   const navigation = useNavigation();
@@ -83,7 +91,7 @@ const SignUpInfo = () => {
 
     try {
       const response = await axios.post(
-        "http://10.186.187.54:5003/signup/details",
+        `${API_URL}/signup/details`,
         {
           userId,
           firstName,
@@ -163,19 +171,19 @@ const SignUpInfo = () => {
       borderWidth: 1,
       borderColor: colors.primary,
     },
-  //  buttonContainer: {
-  //    flexDirection: "row",
-  //    justifyContent: "space-between",
-  //    width: "100%",
-  //  },
-  //  backButton: {
-  //    flex: 1,
-  //    marginRight: 5,
-  //  },
-  //  submitButton: {
-  //    flex: 1,
-  //    marginLeft: 5,
-  //  },
+    //  buttonContainer: {
+    //    flexDirection: "row",
+    //    justifyContent: "space-between",
+    //    width: "100%",
+    //  },
+    //  backButton: {
+    //    flex: 1,
+    //    marginRight: 5,
+    //  },
+    //  submitButton: {
+    //    flex: 1,
+    //    marginLeft: 5,
+    //  },
   });
 
   return (
@@ -189,7 +197,7 @@ const SignUpInfo = () => {
           onChangeText={setFirstName}
           mode="outlined"
           style={styles.input}
-          activeOutlineColor= {colors.primary}
+          activeOutlineColor={colors.primary}
         />
 
         <TextInput
@@ -198,7 +206,7 @@ const SignUpInfo = () => {
           onChangeText={setLastName}
           mode="outlined"
           style={styles.input}
-          activeOutlineColor= {colors.primary}
+          activeOutlineColor={colors.primary}
         />
 
         {/* College Dropdown */}
@@ -265,8 +273,6 @@ const SignUpInfo = () => {
             </ScrollView>
           </View>
         </Modal>
-
-
 
         {/* Class Year Dropdown */}
         <View style={styles.dropdownWrapper}>

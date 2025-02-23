@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "react-native-paper";
 import axios from "axios";
+import { API_URL } from "../../CONST";
 
 const SignUpId = () => {
   const navigation = useNavigation();
@@ -69,7 +70,7 @@ const SignUpId = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://10.186.187.54:5003/signup", {
+      const response = await axios.post(`${API_URL}/signup`, {
         username,
         email,
         password,

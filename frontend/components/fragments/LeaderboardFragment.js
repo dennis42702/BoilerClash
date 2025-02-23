@@ -15,6 +15,7 @@ import ToggleButtonGroup from "../subcomponents/ToggleButtonGroup";
 import ToggleButtonCategories from "../subcomponents/ToggleButtonCategories";
 import ToggleButtonInterval from "../subcomponents/ToggleButtonInterval";
 import axios from "axios";
+import { API_URL } from "../../CONST";
 
 const leaderboardData = {
   leaderboard: [
@@ -87,7 +88,7 @@ const LeaderboardFragment = ({
       let monthlyLeaderboard;
       if (viewType === "INDIVIDUAL") {
         monthlyResponse = await axios.post(
-          "http://10.186.187.54:5003/buildingLeaderboard/individual/monthly",
+          `${API_URL}/buildingLeaderboard/individual/monthly`,
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -95,7 +96,7 @@ const LeaderboardFragment = ({
         monthlyLeaderboard = monthlyResponse.data.leaderboardByBuilding;
       } else {
         monthlyResponse = await axios.post(
-          "http://10.186.187.54:5003/buildingLeaderboard/college/monthly",
+          `${API_URL}/buildingLeaderboard/college/monthly`,
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -106,7 +107,7 @@ const LeaderboardFragment = ({
       let weeklyLeaderboard;
       if (viewType === "INDIVIDUAL") {
         weeklyResponse = await axios.post(
-          "http://10.186.187.54:5003/buildingLeaderboard/individual/weekly",
+          `${API_URL}/buildingLeaderboard/individual/weekly`,
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -114,7 +115,7 @@ const LeaderboardFragment = ({
         weeklyLeaderboard = weeklyResponse.data.leaderboardByBuilding;
       } else {
         weeklyResponse = await axios.post(
-          "http://10.186.187.54:5003/buildingLeaderboard/college/weekly",
+          `${API_URL}/buildingLeaderboard/college/weekly`,
           { buildingName: building },
           { headers: { "Content-Type": "application/json" } }
         );

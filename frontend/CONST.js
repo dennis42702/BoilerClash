@@ -1,2 +1,2 @@
 // CONST.js
-export const API_URL = "http://10.186.187.54:5003";
+export const API_URL = "https://boilerclash.onrender.com";
