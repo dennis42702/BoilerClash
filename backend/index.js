@@ -51,6 +51,9 @@ const initializeBuildings = async () => {
   }
 };
 
+
+
+
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
@@ -157,6 +160,55 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/profile", async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
+
+    const user = await UserModel.findById(userId).select(
+      "username email firstName lastName year college weeklyStudyHours monthlyStudyHours"
+    );
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }  
+
+     // ✅ Compute Weekly Rank
+     const weeklyRank = await UserModel.countDocuments({ 
+      weeklyStudyHours: { $gt: user.weeklyStudyHours } 
+    }) + 1; // Rank is 1 + number of users with higher hours
+
+    // ✅ Compute Monthly Rank
+    const monthlyRank = await UserModel.countDocuments({ 
+      monthlyStudyHours: { $gt: user.monthlyStudyHours } 
+    }) + 1;
+
+    res.json({
+      success: true,
+      profile: {
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        year: user.year,
+        college: user.college,
+        weeklyStudyHours: user.weeklyStudyHours,
+        monthlyStudyHours: user.monthlyStudyHours,
+        weeklyRank,
+        monthlyRank
+      }
+    });
+
+    
+
+
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 
 app.post("/newSession", async (req, res) => {
@@ -408,62 +460,54 @@ app.get("/individualLeaderboard/monthly", async (req, res) => {
 });
 
 
-app.get("/buildingLeaderboard/individual/weekly", async (req, res) => {
+app.post("/buildingLeaderboard/individual/weekly", async (req, res) => {
   try {
+    const { buildingName } = req.body; // ✅ Get buildingName from request body
+
+    if (!buildingName) {
+      return res.status(400).json({ success: false, message: "Building Name is required" });
+    }
+
+    // ✅ Get buildingId from buildingName
+    const building = await BuildingModel.findOne({ buildingName });
+    if (!building) {
+      return res.status(404).json({ success: false, message: "Building not found" });
+    }
+
+    const buildingId = building._id; // ✅ Extract buildingId
+
     const leaderboardByBuilding = await SessionModel.aggregate([
       {
+        $match: { buildingId: buildingId } // ✅ Use buildingId instead of buildingName
+      },
+      {
         $group: {
-          _id: { buildingId: "$buildingId", userId: "$userId" }, // Group by building + user
-          totalDuration: { $sum: "$duration" } // Sum total time per user in each building
+          _id: { userId: "$userId" }, // ✅ Group by userId (since all are for the same building)
+          totalDuration: { $sum: "$duration" } // ✅ Sum study time for each user
         }
       },
-      {
-        $sort: { "_id.buildingId": 1, totalDuration: -1 } // Sort by building & study time
-      },
+      { $sort: { totalDuration: -1 } }, // ✅ Sort by study time DESC
+      { $limit: 10 }, // ✅ Limit to top 10 users
       {
         $lookup: {
-          from: "users", // Join with Users collection
+          from: "users", // ✅ Get user info
           localField: "_id.userId",
           foreignField: "_id",
           as: "userInfo"
         }
       },
-      { $unwind: "$userInfo" }, // Convert array to object
-      {
-        $lookup: {
-          from: "buildings", // Join with Buildings collection
-          localField: "_id.buildingId",
-          foreignField: "_id",
-          as: "buildingInfo"
-        }
-      },
-      { $unwind: "$buildingInfo" },
+      { $unwind: "$userInfo" },
       {
         $project: {
           _id: 0,
-          buildingId: "$_id.buildingId",
-          buildingName: "$buildingInfo.buildingName",
           username: "$userInfo.username",
-          college: "$userInfo.college", // ✅ Fetch College
-          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round hours
-        }
-      },
-      {
-        $group: {
-          _id: "$buildingName",
-          topUsers: { $push: "$$ROOT" } // ✅ Push all users into an array per building
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          buildingName: "$_id",
-          topUsers: { $slice: ["$topUsers", 10] } // ✅ Limit to top 10 users per building
+          college: "$userInfo.college",
+          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round study hours
         }
       }
     ]);
 
-    res.json({ success: true, leaderboard: leaderboardByBuilding });
+    res.json({ success: true, leaderboardByBuilding });
 
   } catch (error) {
     console.error("Error fetching building leaderboard:", error);
@@ -471,62 +515,54 @@ app.get("/buildingLeaderboard/individual/weekly", async (req, res) => {
   }
 });
 
-app.get("/buildingLeaderboard/individual/monthly", async (req, res) => {
+app.post("/buildingLeaderboard/individual/monthly", async (req, res) => {
   try {
+    const { buildingName } = req.body; // ✅ Get buildingName from request body
+
+    if (!buildingName) {
+      return res.status(400).json({ success: false, message: "Building Name is required" });
+    }
+
+    // ✅ Get buildingId from buildingName
+    const building = await BuildingModel.findOne({ buildingName });
+    if (!building) {
+      return res.status(404).json({ success: false, message: "Building not found" });
+    }
+
+    const buildingId = building._id; // ✅ Extract buildingId
+
     const leaderboardByBuilding = await SessionModel.aggregate([
       {
+        $match: { buildingId: buildingId } // ✅ Use buildingId instead of buildingName
+      },
+      {
         $group: {
-          _id: { buildingId: "$buildingId", userId: "$userId" }, // Group by building + user
-          totalDuration: { $sum: "$duration" } // Sum total time per user in each building
+          _id: { userId: "$userId" }, // ✅ Group by userId (since all are for the same building)
+          totalDuration: { $sum: "$duration" } // ✅ Sum study time for each user
         }
       },
-      {
-        $sort: { "_id.buildingId": 1, totalDuration: -1 } // Sort by building & study time
-      },
+      { $sort: { totalDuration: -1 } }, // ✅ Sort by study time DESC
+      { $limit: 10 }, // ✅ Limit to top 10 users
       {
         $lookup: {
-          from: "users", // Join with Users collection
+          from: "users", // ✅ Get user info
           localField: "_id.userId",
           foreignField: "_id",
           as: "userInfo"
         }
       },
-      { $unwind: "$userInfo" }, // Convert array to object
-      {
-        $lookup: {
-          from: "buildings", // Join with Buildings collection
-          localField: "_id.buildingId",
-          foreignField: "_id",
-          as: "buildingInfo"
-        }
-      },
-      { $unwind: "$buildingInfo" },
+      { $unwind: "$userInfo" },
       {
         $project: {
           _id: 0,
-          buildingId: "$_id.buildingId",
-          buildingName: "$buildingInfo.buildingName",
           username: "$userInfo.username",
-          college: "$userInfo.college", // ✅ Fetch College
-          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round hours
-        }
-      },
-      {
-        $group: {
-          _id: "$buildingName",
-          topUsers: { $push: "$$ROOT" } // ✅ Push all users into an array per building
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          buildingName: "$_id",
-          topUsers: { $slice: ["$topUsers", 10] } // ✅ Limit to top 10 users per building
+          college: "$userInfo.college",
+          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round study hours
         }
       }
     ]);
 
-    res.json({ success: true, leaderboard: leaderboardByBuilding });
+    res.json({ success: true, leaderboardByBuilding });
 
   } catch (error) {
     console.error("Error fetching building leaderboard:", error);
@@ -534,6 +570,116 @@ app.get("/buildingLeaderboard/individual/monthly", async (req, res) => {
   }
 });
 
+
+
+app.post("/buildingLeaderboard/college/weekly", async (req, res) => {
+  try {
+    const { buildingName } = req.body; // ✅ Get buildingName from request body
+
+    if (!buildingName) {
+      return res.status(400).json({ success: false, message: "Building Name is required" });
+    }
+
+    // ✅ Get buildingId from buildingName
+    const building = await BuildingModel.findOne({ buildingName });
+    if (!building) {
+      return res.status(404).json({ success: false, message: "Building not found" });
+    }
+
+    const buildingId = building._id; // ✅ Extract buildingId
+
+    const leaderboardByCollege = await SessionModel.aggregate([
+      {
+        $match: { buildingId: buildingId } // ✅ Use buildingId instead of buildingName
+      },
+      {
+        $lookup: {
+          from: "users", // ✅ Get user info
+          localField: "userId",
+          foreignField: "_id",
+          as: "userInfo"
+        }
+      },
+      { $unwind: "$userInfo" }, // ✅ Convert array to object
+      {
+        $group: {
+          _id: "$userInfo.college", // ✅ Group by college
+          totalDuration: { $sum: "$duration" } // ✅ Sum study time for each college
+        }
+      },
+      { $sort: { totalDuration: -1 } }, // ✅ Sort by total study time DESC
+      { $limit: 10 }, // ✅ Limit to top 10 colleges
+      {
+        $project: {
+          _id: 0,
+          college: "$_id",
+          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round study hours
+        }
+      }
+    ]);
+
+    res.json({ success: true, leaderboardByCollege });
+
+  } catch (error) {
+    console.error("Error fetching college leaderboard:", error);
+    res.status(500).json({ success: false, message: "Error retrieving leaderboard", error: error.message });
+  }
+});
+
+
+app.post("/buildingLeaderboard/college/monthly", async (req, res) => {
+  try {
+    const { buildingName } = req.body; // ✅ Get buildingName from request body
+
+    if (!buildingName) {
+      return res.status(400).json({ success: false, message: "Building Name is required" });
+    }
+
+    // ✅ Get buildingId from buildingName
+    const building = await BuildingModel.findOne({ buildingName });
+    if (!building) {
+      return res.status(404).json({ success: false, message: "Building not found" });
+    }
+
+    const buildingId = building._id; // ✅ Extract buildingId
+
+    const leaderboardByCollege = await SessionModel.aggregate([
+      {
+        $match: { buildingId: buildingId } // ✅ Use buildingId instead of buildingName
+      },
+      {
+        $lookup: {
+          from: "users", // ✅ Get user info
+          localField: "userId",
+          foreignField: "_id",
+          as: "userInfo"
+        }
+      },
+      { $unwind: "$userInfo" }, // ✅ Convert array to object
+      {
+        $group: {
+          _id: "$userInfo.college", // ✅ Group by college
+          totalDuration: { $sum: "$duration" } // ✅ Sum study time for each college
+        }
+      },
+      { $sort: { totalDuration: -1 } }, // ✅ Sort by total study time DESC
+      { $limit: 10 }, // ✅ Limit to top 10 colleges
+      {
+        $project: {
+          _id: 0,
+          college: "$_id",
+          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round study hours
+        }
+      }
+    ]);
+
+    res.json({ success: true, leaderboardByCollege });
+
+  } catch (error) {
+    console.error("Error fetching college leaderboard:", error);
+    res.status(500).json({ success: false, message: "Error retrieving leaderboard", error: error.message });
+  }
+});
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
