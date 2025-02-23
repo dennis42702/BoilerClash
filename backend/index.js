@@ -1,10 +1,11 @@
 require('dotenv').config();
 
+const cron = require("node-cron");
+const UserModel = require("./models/User");
+
 const UserModel = require('./models/User');
 const SessionModel = require('./models/Session')
 const BuildingModel = require('./models/Building')
-const IndividualMonthlyLeaderboardModel = require('./models/IndividualMonthlyLeaderboard')
-const IndividualWeeklyLeaderboardModel = require('./models/IndividualWeeklyLeaderboard')
 const CollegeLeaderboardModel = require('./models/CollegeLeaderboard')
 const BuildingLeaderboardModel = require('./models/BuildingLeaderboard')
 
@@ -55,6 +56,9 @@ mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
     await initializeBuildings(); // Initialize buildings only if they don’t exist
+
+
+
   })
   .catch(err => console.error("MongoDB Connection Failed:", err));
 
@@ -405,4 +409,7 @@ app.get("/individualLeaderboard/monthly", async (req, res) => {
 
 
 
+
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
