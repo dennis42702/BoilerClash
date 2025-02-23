@@ -30,16 +30,25 @@ const initializeBuildings = async () => {
 
       await BuildingModel.insertMany([
         { buildingName: "WALC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "PMU", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "RAWL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "BHEE", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "HICKS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "HAAS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "DUDL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "LMBS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "GRIS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "LWSN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "LILY", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "KRCH", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "CREC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "STEW", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "KRAN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "WTHR", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "BRWN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "UNIV", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "ME", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "SC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
         { buildingName: "RAWL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 }
       ]);
 
@@ -398,6 +407,8 @@ app.post("/profile", async (req, res) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }  
 
+    const totalUsers = await UserModel.countDocuments();
+
      // ✅ Compute Weekly Rank
      const weeklyRank = await UserModel.countDocuments({ 
       weeklyStudyHours: { $gt: user.weeklyStudyHours } 
@@ -420,7 +431,8 @@ app.post("/profile", async (req, res) => {
         weeklyStudyHours: user.weeklyStudyHours,
         monthlyStudyHours: user.monthlyStudyHours,
         weeklyRank,
-        monthlyRank
+        monthlyRank,
+        totalUsers
       }
     });
 
