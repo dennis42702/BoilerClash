@@ -20,9 +20,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    await AsyncStorage.setItem("userId", email);
+    const userId = "1";
+    navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
 
-    navigation.navigate("HomeScreen");
     return;
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
@@ -52,6 +52,7 @@ const Login = () => {
 
       if (response.data.success) {
         const userId = response.data.userId;
+        console.log(userId);
         Alert.alert("Success", "Login successful!");
         //await AsyncStorage.setItem("email", email, () =>
         // console.log("email saved")

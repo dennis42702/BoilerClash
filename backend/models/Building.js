@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const BuildingSchema = new mongoose.Schema({
-    name: {type:String, required:true},
+    buildingName: {type:String, required:true},
     //coord 
     conqueredByUser: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null }, 
-    conqueredByTeam: {type:String, required:true, default: null},
+    conqueredByTeam: {type:String, default: null},
     total_people: {type:Number, default: 0}, //query sessions every like few minutes?
     
 

@@ -19,8 +19,42 @@ const PORT = process.env.PORT || 5003;
 app.use(bodyParser.json());
 app.use(cors()); 
 
+const initializeBuildings = async () => {
+  try {
+    const existingBuildings = await BuildingModel.countDocuments();
+    
+    if (existingBuildings === 0) {
+      console.log("No buildings found. Inserting default buildings...");
+      
+      await BuildingModel.insertMany([
+        { buildingName: "WALC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "HICKS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "HAAS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "DUDL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "LMBS", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        { buildingName: "LWSN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "LILY", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "KRCH", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "CREC", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "STEW", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "KRAN", conqueredByUser: null, conqueredByTeam: null, total_people: 0 },
+        {buildingName: "RAWL", conqueredByUser: null, conqueredByTeam: null, total_people: 0 }
+      ]);
+
+      console.log("Default buildings inserted.");
+    } else {
+      console.log("Buildings already exist. Skipping initialization.");
+    }
+  } catch (err) {
+    console.error("Error initializing buildings:", err);
+  }
+};
+
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
+  .then(async () => {
+    console.log("MongoDB Connected");
+    await initializeBuildings(); // Initialize buildings only if they don’t exist
+  })
   .catch(err => console.error("MongoDB Connection Failed:", err));
 
   app.post("/signup", async (req, res) => {
@@ -116,6 +150,147 @@ mongoose.connect(process.env.MONGO_URI)
   });
 
 
+  
+  app.post("/newSession", async (req, res) => {
+    console.log(new Date());
+    try {
+    
+      const { userId, buildingName, startTime, endTime } = req.body;
+      console.log("sibal");
+      console.log(typeof userId);
+      
+      
+      if (!userId || !buildingName || !startTime || !endTime) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+      }
+
+      const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+      const building = await BuildingModel.findOne({ buildingName });
+      if (!building) {
+        return res.status(404).json({ success: false, message: "Building not found" });
+      }
+      console.log("sibal");
+
+      const buildingId = building._id;
+      parsedStartTime = new Date(startTime);
+      parsedEndTime = new Date(endTime);
+
+      console.log("endTime type",typeof endTime);
+      console.log("startTime type", typeof startTime);
+      console.log( endTime);
+      console.log( startTime);
+
+      const duration = (parsedEndTime - parsedStartTime) / (1000 * 60 * 60);
+      console.log("se");
+      if (duration < 0) {
+        return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
+      }
+  
+      const newSession = await SessionModel.create({ 
+        buildingId, userId, startTime: parsedStartTime, endTime:parsedEndTime, duration,
+        username: user.username,
+      });
+      console.log(newSession);
+
+  
+      res.status(201).json({ success: true, message: "Item created", sessionId: newSession._id, data: newSession }); //send sessionId;
+  
+    } catch (error) {
+      console.error("Error in newSession:", error);
+      res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+  });
+
+  app.post("/updateSession", async (req, res) => {
+    try {
+      const { sessionId, endTime } = req.body;
+
+      
+      if (!sessionId || !endTime) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+      }
+      
+
+      const session = await SessionModel.findById(sessionId);
+
+      if (!session) {
+        return res.status(404).json({ success: false, message: "Session not found" });
+      }
+
+      const sStartTime = session.startTime  ;
+      console.log("utype: ", typeof sStartTime)
+      console.log("utype: ", typeof endTime)
+      const parsedEndTime = new Date(endTime);
+
+      const duration = (parsedEndTime - sStartTime) / (1000 * 60 * 60);
+      console.log("uduraton: ", duration);
+
+      if (duration < 0) {
+        return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
+      }
+
+      session.endTime = parsedEndTime;
+      session.duration = duration;
+      await session.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Session updated successfully",
+        updatedSession: session,
+        addedHours: duration
+      });
+
+  
+    } catch (error) {
+      console.error("Error in updateSession:", error);
+      res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+  });
+
+
+  app.post("/individualLeaderboard", async (req, res) => {
+    try {
+      const { sessionId, endTime } = req.body;
+
+      
+      if (!sessionId || !endTime) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+      }
+      
+      const session = await SessionModel.findById(sessionId);
+
+      if (!session) {
+        return res.status(404).json({ success: false, message: "Session not found" });
+      }
+
+      const startTime = session.startTime;
+      const duration = (endTime - startTime) / (1000 * 60 * 60);
+
+      if (duration < 0) {
+        return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
+      }
+
+      session.endTime = endTime;
+      session.duration = duration;
+      await session.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Session updated successfully",
+        updatedSession: session,
+        addedHours: duration
+      });
+
+  
+    } catch (error) {
+      console.error("Error in updateSession:", error);
+      res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+  });
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
