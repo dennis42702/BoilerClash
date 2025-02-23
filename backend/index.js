@@ -193,6 +193,7 @@ app.post("/newSession", async (req, res) => {
     const duration = (parsedEndTime - parsedStartTime) / (1000 * 60 * 60);
     console.log("se");
     if (duration < 0) {
+      console.log("its minus")
       return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
     }
 
@@ -205,7 +206,7 @@ app.post("/newSession", async (req, res) => {
     user.weeklyStudyHours += duration;
     user.monthlyStudyHours += duration;
     await user.save();
-    console.log(`Updated ${user.username}'s Study Hours by ${duration}`);
+    console.log(`new session:Updated ${user.username}'s Study Hours by ${duration}`);
 
 
     res.status(201).json({ success: true, message: "Item created", sessionId: newSession._id, data: newSession }); //send sessionId;
@@ -243,6 +244,7 @@ app.post("/updateSession", async (req, res) => {
     console.log(" update session duraton: ", duration);
 
     if (duration < 0) {
+      console.log("its minus")
       return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
     }
 
@@ -256,8 +258,9 @@ app.post("/updateSession", async (req, res) => {
     }
 
     const addedHours = (parsedEndTime - previousEndTime) / (1000 * 60 * 60);
-    console.log(`Updated ${user.username}'s Study Hours by ${addedHours}`);
+    console.log(`update session: Updated ${user.username}'s Study Hours by ${addedHours}`);
     if (addedHours < 0) {
+      console.log("its minus")
       return res.status(400).json({ success: false, message: "Invalid end time. Must be after previous end time." });
     }
 
@@ -289,7 +292,7 @@ app.get("/individualLeaderboard/weekly", async (req, res) => {
       const leaderboard = await UserModel.find()
           .sort({ weeklyStudyHours: -1 }) 
           .limit(20)
-          .select("username weeklyStudyHours") 
+          .select("username weeklyStudyHours college") 
           .lean();
 
       const topLocations = await SessionModel.aggregate([
@@ -350,7 +353,7 @@ app.get("/individualLeaderboard/monthly", async (req, res) => {
       const leaderboard = await UserModel.find()
           .sort({ monthlyStudyHours: -1 }) // ✅ Sort users by most study hours
           .limit(20) // ✅ Get top 20 users
-          .select("username monthlyStudyHours") // ✅ Only fetch necessary fields
+          .select("username monthlyStudyHours college") // ✅ Only fetch necessary fields
           .lean();
 
       const topLocations = await SessionModel.aggregate([
@@ -405,8 +408,131 @@ app.get("/individualLeaderboard/monthly", async (req, res) => {
 });
 
 
+app.get("/buildingLeaderboard/individual/weekly", async (req, res) => {
+  try {
+    const leaderboardByBuilding = await SessionModel.aggregate([
+      {
+        $group: {
+          _id: { buildingId: "$buildingId", userId: "$userId" }, // Group by building + user
+          totalDuration: { $sum: "$duration" } // Sum total time per user in each building
+        }
+      },
+      {
+        $sort: { "_id.buildingId": 1, totalDuration: -1 } // Sort by building & study time
+      },
+      {
+        $lookup: {
+          from: "users", // Join with Users collection
+          localField: "_id.userId",
+          foreignField: "_id",
+          as: "userInfo"
+        }
+      },
+      { $unwind: "$userInfo" }, // Convert array to object
+      {
+        $lookup: {
+          from: "buildings", // Join with Buildings collection
+          localField: "_id.buildingId",
+          foreignField: "_id",
+          as: "buildingInfo"
+        }
+      },
+      { $unwind: "$buildingInfo" },
+      {
+        $project: {
+          _id: 0,
+          buildingId: "$_id.buildingId",
+          buildingName: "$buildingInfo.buildingName",
+          username: "$userInfo.username",
+          college: "$userInfo.college", // ✅ Fetch College
+          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round hours
+        }
+      },
+      {
+        $group: {
+          _id: "$buildingName",
+          topUsers: { $push: "$$ROOT" } // ✅ Push all users into an array per building
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          buildingName: "$_id",
+          topUsers: { $slice: ["$topUsers", 10] } // ✅ Limit to top 10 users per building
+        }
+      }
+    ]);
 
+    res.json({ success: true, leaderboard: leaderboardByBuilding });
 
+  } catch (error) {
+    console.error("Error fetching building leaderboard:", error);
+    res.status(500).json({ success: false, message: "Error retrieving leaderboard", error: error.message });
+  }
+});
+
+app.get("/buildingLeaderboard/individual/monthly", async (req, res) => {
+  try {
+    const leaderboardByBuilding = await SessionModel.aggregate([
+      {
+        $group: {
+          _id: { buildingId: "$buildingId", userId: "$userId" }, // Group by building + user
+          totalDuration: { $sum: "$duration" } // Sum total time per user in each building
+        }
+      },
+      {
+        $sort: { "_id.buildingId": 1, totalDuration: -1 } // Sort by building & study time
+      },
+      {
+        $lookup: {
+          from: "users", // Join with Users collection
+          localField: "_id.userId",
+          foreignField: "_id",
+          as: "userInfo"
+        }
+      },
+      { $unwind: "$userInfo" }, // Convert array to object
+      {
+        $lookup: {
+          from: "buildings", // Join with Buildings collection
+          localField: "_id.buildingId",
+          foreignField: "_id",
+          as: "buildingInfo"
+        }
+      },
+      { $unwind: "$buildingInfo" },
+      {
+        $project: {
+          _id: 0,
+          buildingId: "$_id.buildingId",
+          buildingName: "$buildingInfo.buildingName",
+          username: "$userInfo.username",
+          college: "$userInfo.college", // ✅ Fetch College
+          totalDuration: { $round: ["$totalDuration", 3] } // ✅ Round hours
+        }
+      },
+      {
+        $group: {
+          _id: "$buildingName",
+          topUsers: { $push: "$$ROOT" } // ✅ Push all users into an array per building
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          buildingName: "$_id",
+          topUsers: { $slice: ["$topUsers", 10] } // ✅ Limit to top 10 users per building
+        }
+      }
+    ]);
+
+    res.json({ success: true, leaderboard: leaderboardByBuilding });
+
+  } catch (error) {
+    console.error("Error fetching building leaderboard:", error);
+    res.status(500).json({ success: false, message: "Error retrieving leaderboard", error: error.message });
+  }
+});
 
 
 
