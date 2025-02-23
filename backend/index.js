@@ -534,7 +534,16 @@ app.get("/buildingLeaderboard/individual/monthly", async (req, res) => {
   }
 });
 
-
+// Get all buildings
+app.get("/api/buildings", async (req, res) => {
+  try {
+    const buildings = await BuildingModel.find();
+    res.json({ success: true, buildings });
+  } catch (err) {
+    console.error("Error fetching buildings:", err);
+    res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
