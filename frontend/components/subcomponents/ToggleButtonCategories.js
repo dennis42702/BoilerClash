@@ -4,7 +4,7 @@ import { ToggleButton, useTheme } from "react-native-paper";
 
 const ToggleButtonCategories = ({ onPress }) => {
   const { colors } = useTheme();
-  const [viewType, setViewType] = useState("INDIVIDUAL");
+  const [viewType, setViewType] = useState("TOTAL");
 
   const styles = StyleSheet.create({
     toggleContainer: {
@@ -21,12 +21,18 @@ const ToggleButtonCategories = ({ onPress }) => {
     },
   });
 
+  const handleValueChange = (value) => {
+    if (value == null) return;
+    // console.log("Value changed to:", value);
+    if (value !== viewType) {
+      setViewType(value);
+      onPress(value);
+    }
+  };
+
   return (
     <View style={styles.toggleContainer}>
-      <ToggleButton.Group
-        onValueChange={(value) => setViewType(value)}
-        value={viewType}
-      >
+      <ToggleButton.Group onValueChange={handleValueChange} value={viewType}>
         <ToggleButton
           icon="menu"
           value="TOTAL"

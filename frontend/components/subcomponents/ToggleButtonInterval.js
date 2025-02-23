@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import { SegmentedButtons } from "react-native-paper";
 
 const ToggleButtonInterval = () => {
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState("WEEKLY");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 });
 

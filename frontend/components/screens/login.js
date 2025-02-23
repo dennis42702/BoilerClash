@@ -20,9 +20,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    console.log("Login button pressed");
     const userId = "1";
     navigation.navigate("HomeScreen", { userId }); // Navigate to Home Screen
 
+    setLoading(false);
+    console.log("Login button pressed");
     return;
     if (!email || !password) {
       Alert.alert("Error", "Please enter both Email and Password.");
@@ -144,7 +147,7 @@ const Login = () => {
           mode="contained"
           onPress={handleLogin}
           loading={loading}
-          disabled={loading}
+          // disabled={loading}
           style={styles.loginButton}
         >
           {loading ? "Logging in..." : "Login"}

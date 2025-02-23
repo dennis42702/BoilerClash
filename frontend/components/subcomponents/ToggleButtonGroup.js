@@ -21,12 +21,18 @@ const ToggleButtonGroup = ({ onPress }) => {
     },
   });
 
+  const handleValueChange = (value) => {
+    if (value == null) return;
+    // console.log("Value changed to:", value);
+    if (value !== viewType) {
+      setViewType(value);
+      onPress(value);
+    }
+  };
+
   return (
     <View style={styles.toggleContainer}>
-      <ToggleButton.Group
-        onValueChange={(value) => setViewType(value)}
-        value={viewType}
-      >
+      <ToggleButton.Group onValueChange={handleValueChange} value={viewType}>
         <ToggleButton
           icon="account-group-outline"
           value="TEAM"

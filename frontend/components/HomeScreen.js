@@ -26,8 +26,8 @@ const HomeScreen = () => {
 
   const { colors } = useTheme();
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
     {
       key: "leaderboard",
       title: "Leaderboard",
@@ -89,8 +89,8 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    fetchWeeklyIndividualLeaderboard();
-    fetchMonthlyIndividualLeaderboard();
+    // fetchWeeklyIndividualLeaderboard();
+    // fetchMonthlyIndividualLeaderboard();
   }, []);
 
   return (
