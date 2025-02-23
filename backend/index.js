@@ -168,6 +168,9 @@ mongoose.connect(process.env.MONGO_URI)
       const buildingId = building._id;
 
       const duration = (endTime - startTime) / (1000 * 60 * 60);
+      if (duration < 0) {
+        return res.status(400).json({ success: false, message: "Invalid end time. Must be after start time." });
+      }
   
       const newSession = await SessionModel.create({ buildingId, userId, startTime, endTime, duration });
   
@@ -187,6 +190,7 @@ mongoose.connect(process.env.MONGO_URI)
       if (!sessionId || !endTime) {
         return res.status(400).json({ success: false, message: "Missing required fields" });
       }
+      
 
 
 
