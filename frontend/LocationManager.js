@@ -6,7 +6,7 @@ import { findBuildingByCoordinate } from "./util/util";
 import axios from "axios";
 import { endAsyncEvent } from "react-native/Libraries/Performance/Systrace";
 
-const updateInterval = 1000; // 1 second
+const updateInterval = 2000; // 1 second
 const SESSION_MINIMUM_THRESHOLD = 3000; // 3 seconds
 const INBETWEEN_SESSION_THRESHOLD = 3000; // 3 seconds
 
@@ -78,7 +78,10 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
           );
 
           iteration++;
-        } else if (currentTime - prevTimestamp >= SESSION_MINIMUM_THRESHOLD) {
+        } else if (
+          currentTime - prevTimestamp >= SESSION_MINIMUM_THRESHOLD &&
+          !sessionId
+        ) {
           console.log("Sending Data to Server");
 
           const response = await axios.post(
